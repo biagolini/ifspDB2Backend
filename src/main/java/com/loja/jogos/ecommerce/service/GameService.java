@@ -27,6 +27,11 @@ public class GameService {
         return this.gameRepository.findAll(GameSpecification.likeDescription(name, genre), pageable);
     }
 
+    public Page<Game> findByidTypePlatform(Pageable pageable, Long id) {
+        return this.gameRepository.findByidTypePlatform(pageable, id);
+    }
+
+
     public Page<Highlight> findHighlight(Pageable pageable) {
         return this.highlightRepository.findAll(HighlightSpecification.isActive(), pageable);
     }

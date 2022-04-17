@@ -37,6 +37,19 @@ public class GameController {
                 .map(entity -> this.conversionService.convert(entity, GameDto.class));
     }
 
+    @GetMapping("/platform/{id}")
+    public @ResponseBody
+    Page<GameDto> findAllPaginated(
+            @PathVariable Long id,
+            @PageableDefault(sort = "dsReleaseDate", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable
+    ) {
+        return this.gameService
+                .findByidTypePlatform(pageable, id)
+                .map(entity -> this.conversionService.convert(entity, GameDto.class));
+    }
+
+
+
     @GetMapping("/hl")
     public @ResponseBody
     Page<HighlightDto> findAllPaginated(@PageableDefault(sort = "publicationDate", direction = Sort.Direction.DESC, page = 0, size = 5) Pageable customizedPageable)
