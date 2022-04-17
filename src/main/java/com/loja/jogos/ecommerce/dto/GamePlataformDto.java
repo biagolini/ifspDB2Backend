@@ -10,13 +10,12 @@ public class GamePlataformDto {
 
     private Long id;
     private Long game;
-    private Boolean isVideo;
+    private Long platform;
     private String url;
 
     public GamePlataformDto(GamePlataform gamePlataform) {
         this.id = gamePlataform.getId();
-        this.game = gamePlataform.getGame();
-        this.isVideo = gamePlataform.getIsVideo();
-        this.url = gamePlataform.getUrl();
+        this.game = gamePlataform.getGame().getId();
+        this.platform = gamePlataform.getPlatform().getId();
     }
 }

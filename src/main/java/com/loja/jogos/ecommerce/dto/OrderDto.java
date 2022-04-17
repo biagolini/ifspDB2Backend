@@ -18,8 +18,8 @@ public class OrderDto {
     public OrderDto(Order order) {
         this.id = order.getId();
         this.idPrice = order.getIdPrice();
-        this.idCustomer = order.getIdCustomer();
-        this.idTypeStatusOrder = order.getIdTypeStatusOrder();
+        this.idCustomer = order.getCustomer().getId();
+        this.idTypeStatusOrder = order.getTypeStatusOrder().getId();
         this.quantity = order.getQuantity();
         this.trackingCode = order.getTrackingCode();
     }

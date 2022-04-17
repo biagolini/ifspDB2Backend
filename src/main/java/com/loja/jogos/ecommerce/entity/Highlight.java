@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tblhighlight")
+@Table(name = "tblHighlight")
 @Builder
 @Getter
 @Setter
@@ -16,13 +16,13 @@ public class Highlight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "iddestaque")
+    @Column(name = "idHighlight")
     private Long id;
 
-    @Column(name = "idgame")
+    @Column(name = "idGame")
     private Long game;
 
-    @Column(name = "dspublicationdate")
+    @Column(name = "dsPublicationDate")
     private LocalDate publicationDate;
 
     @Column(name = "stactive")

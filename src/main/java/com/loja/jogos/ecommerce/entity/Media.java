@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tblmedia")
+@Table(name = "tblMedia")
 @Builder
 @Getter
 @Setter
@@ -16,19 +16,19 @@ public class Media {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idmedia")
+    @Column(name = "idMedia")
     private Long id;
 
-    @Column(name = "idgame")
+    @Column(name = "idGame")
     private Long game;
 
-    @Column(name = "isvideo")
+    @Column(name = "isVideo")
     private Boolean isVideo;
 
-    @Column(name = "dsurl")
+    @Column(name = "dsUrl")
     private String url;
 
-    @Column(name = "stactive")
+    @Column(name = "stActive")
     private Boolean isActive;
 
 }

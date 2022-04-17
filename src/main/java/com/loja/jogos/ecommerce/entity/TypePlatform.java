@@ -10,7 +10,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tbltypeplatform")
+@Table(name = "tblTypePlatform")
 @Builder
 @Getter
 @Setter
@@ -20,13 +20,13 @@ public class TypePlatform {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idtypeplatform")
+    @Column(name = "idTypePlatform")
     private Long id;
 
-    @Column(name = "dsdescription")
+    @Column(name = "dsDescription")
     private String description;
 
-    @Column(name = "stactive")
+    @Column(name = "stActive")
     private Boolean isActive;
 
 }

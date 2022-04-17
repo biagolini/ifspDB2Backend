@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tblprice")
+@Table(name = "tblPrice")
 @Builder
 @Getter
 @Setter
@@ -15,16 +15,16 @@ public class Price {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idprice")
+    @Column(name = "idPrice")
     private Long id;
 
-    @Column(name = "idgameplataform")
+    @Column(name = "idGamePlataform")
     private Long gamePlataform;
 
-    @Column(name = "dsvalue")
+    @Column(name = "dsValue")
     private double value;
 
-    @Column(name = "stactive")
+    @Column(name = "stActive")
     private Boolean isActive;
 
 }

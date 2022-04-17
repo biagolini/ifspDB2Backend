@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "tblgameplataform")
+@Table(name = "tblGamePlataform")
 @Builder
 @Getter
 @Setter
@@ -16,19 +16,18 @@ public class GamePlataform {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idgameplataform")
+    @Column(name = "idGamePlataform")
     private Long id;
 
-    @Column(name = "idgame")
-    private Long game;
+    @JoinColumn(name = "idGame")
+    @ManyToOne
+    private Game game;
 
-    @Column(name = "isvideo")
-    private Boolean isVideo;
+    @JoinColumn(name = "idTypePlatform")
+    @ManyToOne
+    private TypePlatform platform;
 
-    @Column(name = "dsurl")
-    private String url;
-
-    @Column(name = "stactive")
+    @Column(name = "stActive")
     private Boolean isActive;
 
 }

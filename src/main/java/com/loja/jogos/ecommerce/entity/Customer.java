@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tblcustomer")
+@Table(name = "tblCustomer")
 @Builder
 @Getter
 @Setter
@@ -17,43 +17,43 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idcustomer")
+    @Column(name = "idCustomer")
     private Long id;
 
-    @Column(name = "dsusername")
+    @Column(name = "dsUsername")
     private String username;
 
-    @Column(name = "dsfirstname")
+    @Column(name = "dsFirstName")
     private String firstName;
 
-    @Column(name = "dslastname")
+    @Column(name = "dsLastName")
     private String lastName;
 
-    @Column(name = "dsemail")
+    @Column(name = "dsEmail")
     private String email;
 
-    @Column(name = "dsbirthdate")
+    @Column(name = "dsBirthDate")
     private LocalDate birthDate;
 
-    @Column(name = "dscpf")
+    @Column(name = "dsCPF")
     private String cpf;
 
-    @Column(name = "dsstreet")
+    @Column(name = "dsStreet")
     private String street;
 
-    @Column(name = "dsnumber")
+    @Column(name = "dsNumber")
     private String number;
 
-    @Column(name = "dscity")
+    @Column(name = "dsCity")
     private String city;
 
-    @Column(name = "idtypestate")
+    @Column(name = "idTypeState")
     private Long stateId;
 
-    @Column(name = "dszip")
+    @Column(name = "dsZip")
     private String zip;
 
-    @Column(name = "stactive")
+    @Column(name = "stActive")
     private Boolean isActive;
 
     public Customer(CustomerForm form) {

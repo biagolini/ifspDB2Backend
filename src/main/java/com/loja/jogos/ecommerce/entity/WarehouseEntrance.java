@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tblwarehouseentrance")
+@Table(name = "tblWarehouseEntrance")
 @Builder
 @Getter
 @Setter
@@ -15,16 +15,16 @@ public class WarehouseEntrance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idwarehouseentrance")
+    @Column(name = "idWarehouseEntrance")
     private Long id;
 
-    @Column(name = "idgameplataform")
+    @Column(name = "idGamePlataform")
     private Long gamePlataform;
 
-    @Column(name = "dsquantity")
+    @Column(name = "dsQuantity")
     private Long quantity;
 
-    @Column(name = "stactive")
+    @Column(name = "stActive")
     private Boolean isActive;
 
 }

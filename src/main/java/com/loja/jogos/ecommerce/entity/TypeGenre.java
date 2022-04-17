@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tbltypegenre")
+@Table(name = "tblTypeGenre")
 @Builder
 @Getter
 @Setter
@@ -15,16 +15,16 @@ public class TypeGenre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idtypegenre")
+    @Column(name = "idTypeGenre")
     private Long id;
 
-    @Column(name = "dsdescriptionen")
+    @Column(name = "dsDescriptionEN")
     private String descriptionEn;
 
-    @Column(name = "dsdescriptionpt")
+    @Column(name = "dsDescriptionPT")
     private String descriptionPt;
 
-    @Column(name = "stactive")
+    @Column(name = "stActive")
     private Boolean isActive;
 
 }

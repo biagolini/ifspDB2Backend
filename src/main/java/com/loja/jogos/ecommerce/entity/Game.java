@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 
 @Entity
-@Table(name = "tblgame")
+@Table(name = "tblGame")
 @Builder
 @Getter
 @Setter
@@ -16,25 +16,25 @@ import java.time.LocalDate;
 public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idgame")
+    @Column(name = "idGame")
     private Long id;
 
-    @Column(name = "dsname")
+    @Column(name = "dsName")
     private String name;
 
-    @Column(name = "dsreleasedate")
+    @Column(name = "dsReleaseDate")
     private LocalDate releaseDate;
 
-    @Column(name = "idtypegenre")
+    @Column(name = "idTypeGenre")
     private Long genre;
 
-    @Column(name = "idpublisher")
+    @Column(name = "idPublisher")
     private Long publisher;
 
-    @Column(name = "dscover")
+    @Column(name = "dsCover")
     private String cover;
 
-    @Column(name = "stactive")
+    @Column(name = "stActive")
     private Boolean isActive;
 
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameSpecification {
+
     public static Specification<Game> nameLike(String info) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Game_.name), "%" + info + "%");
     }
@@ -17,11 +18,9 @@ public class GameSpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Game_.genre), info);
     }
 
-
     public static Specification<Game> isActive() {
         return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get(Game_.isActive));
     }
-
 
     public static Specification<Game> likeDescription(String name, Long genre) {
         return (root, query, criteriaBuilder) -> {

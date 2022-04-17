@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tblpublisher")
+@Table(name = "tblPublisher")
 @Builder
 @Getter
 @Setter
@@ -15,16 +15,16 @@ public class Publisher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idpublisher")
+    @Column(name = "idPublisher")
     private Long id;
 
-    @Column(name = "dsdescription")
+    @Column(name = "dsDescription")
     private String description;
 
-    @Column(name = "dswikipedialink")
+    @Column(name = "dsWikipediaLink")
     private String mediaLink;
 
-    @Column(name = "stactive")
+    @Column(name = "stActive")
     private Boolean isActive;
 
 }

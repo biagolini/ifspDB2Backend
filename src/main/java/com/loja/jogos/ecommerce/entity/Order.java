@@ -1,11 +1,12 @@
 package com.loja.jogos.ecommerce.entity;
 
+import com.loja.jogos.ecommerce.dto.OrderForm;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tblorder")
+@Table(name = "tblOrder")
 @Builder
 @Getter
 @Setter
@@ -15,26 +16,38 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idorder")
+    @Column(name = "idOrder")
     private Long id;
 
-    @Column(name = "idprice")
+    @Column(name = "idPrice")
     private Long idPrice;
 
-    @Column(name = "idcustomer")
-    private Long idCustomer;
+    @JoinColumn(name = "idCustomer")
+    @ManyToOne
+    private Customer customer;
 
-    @Column(name = "idtypestatusorder")
-    private Long idTypeStatusOrder;
 
-    @Column(name = "dsquantity")
+    @JoinColumn(name = "idTypeStatusOrder")
+    @ManyToOne
+    private TypeStatusOrder typeStatusOrder;
+
+    @Column(name = "dsQuantity")
     private Long quantity;
 
-    @Column(name = "dstrackingcode")
+    @Column(name = "dsTrackingCode")
     private String trackingCode;
 
-    @Column(name = "stactive")
-    private Boolean isActive;
+    public Order(OrderForm form, Customer customer, TypeStatusOrder typeStatusOrder) {
+        this.idPrice = form.getIdPrice();
+        this.customer = customer;
+        this.typeStatusOrder = typeStatusOrder;
+        this.quantity = form.getQuantity();
+        this.trackingCode = form.getTrackingCode();
+    }
+
+    public void updateStatus(OrderForm form, TypeStatusOrder typeStatusOrder) {
+        this.typeStatusOrder = typeStatusOrder;
+    }
 
 }
 

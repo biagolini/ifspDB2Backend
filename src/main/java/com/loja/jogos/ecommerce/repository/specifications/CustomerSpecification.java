@@ -1,9 +1,8 @@
 package com.loja.jogos.ecommerce.repository.specifications;
 
 import com.loja.jogos.ecommerce.entity.Customer;
-import com.loja.jogos.ecommerce.entity.Customer_;
-import org.springframework.data.jpa.domain.Specification;
 
+import com.loja.jogos.ecommerce.entity.Customer_;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;
