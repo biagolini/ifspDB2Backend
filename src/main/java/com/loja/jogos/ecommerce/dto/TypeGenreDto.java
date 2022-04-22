@@ -11,13 +11,10 @@ public class TypeGenreDto {
     private Long id;
     private String descriptionEn;
     private String descriptionPt;
-    private Boolean isActive;
-
 
     public TypeGenreDto(TypeGenre typeGenre) {
         this.id = typeGenre.getId();
         this.descriptionEn = typeGenre.getDescriptionEn();
         this.descriptionPt = typeGenre.getDescriptionPt();
-        this.isActive = typeGenre.getIsActive();
     }
 }

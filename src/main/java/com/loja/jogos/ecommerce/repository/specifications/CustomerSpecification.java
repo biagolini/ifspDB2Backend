@@ -3,6 +3,7 @@ package com.loja.jogos.ecommerce.repository.specifications;
 import com.loja.jogos.ecommerce.entity.Customer;
 
 import com.loja.jogos.ecommerce.entity.Customer_;
+import com.loja.jogos.ecommerce.entity.Game_;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;
@@ -36,18 +37,23 @@ public class CustomerSpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Customer_.city),"%"+info+"%");
     }
 
+    public static Specification<Customer> stateLike(Long info){
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Customer_.stateId), info);
+    }
+
     public static Specification<Customer> isActive(){
         return (root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get(Customer_.isActive));
     }
 
 
-    public static Specification<Customer> likeDescription(String firstName, String lastName, String email, String cpf){
+    public static Specification<Customer> likeDescription(String firstName, String lastName, String email, String cpf, Long state){
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>(5);
             if(firstName != null) predicates.add(firstNameLike(firstName).toPredicate(root,query,criteriaBuilder));
             if(lastName != null) predicates.add(lastNameLike(lastName).toPredicate(root,query,criteriaBuilder));
             if(email != null) predicates.add(emailLike(email).toPredicate(root,query,criteriaBuilder));
             if(cpf != null) predicates.add(cpfLike(cpf).toPredicate(root,query,criteriaBuilder));
+            if(state != null) predicates.add(stateLike(state).toPredicate(root,query,criteriaBuilder));
             predicates.add(criteriaBuilder.isTrue(root.get(Customer_.isActive)));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };

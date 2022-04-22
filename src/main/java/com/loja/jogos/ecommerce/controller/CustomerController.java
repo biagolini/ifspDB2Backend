@@ -2,6 +2,7 @@ package com.loja.jogos.ecommerce.controller;
 
 import com.loja.jogos.ecommerce.dto.CustomerDto;
 import com.loja.jogos.ecommerce.dto.CustomerForm;
+import com.loja.jogos.ecommerce.dto.TypeGenreDto;
 import com.loja.jogos.ecommerce.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/customer")
@@ -31,23 +33,30 @@ public class CustomerController {
             @RequestParam(required = false) String lastName,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String cpf,
+            @RequestParam(required = false) Long state,
             Pageable pageable
     ){
-        if(query==null && firstName==null && lastName==null&& email==null&& cpf==null) { // Busca sem nenhum parametro
+        if(query==null && firstName==null && lastName==null && email==null && cpf==null && state==null) { // Busca sem nenhum parametro
             return this.customerService
                     .findAll(pageable)
                     .map(entity -> this.conversionService.convert(entity, CustomerDto.class));
 
-        } else if(query!=null && firstName==null && lastName==null&& email==null&& cpf==null ){ // Busca com uma query generica
+        } else if(query!=null && firstName==null && lastName==null && email==null && cpf==null && state==null ){ // Busca com uma query generica
             return this.customerService
                     .findAll(pageable,query)
                     .map(entity -> this.conversionService.convert(entity,CustomerDto.class));
         }
         return this.customerService // Busca com dados de perfil
-                .findAll(pageable,firstName, lastName, email, cpf)
+                .findAll(pageable,firstName, lastName, email, cpf, state)
                 .map(entity -> this.conversionService.convert(entity,CustomerDto.class));
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findCustomerByOd(@PathVariable Long id) {
+        CustomerDto response = this.customerService.findCustomerByOd(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
     @PostMapping()
     public ResponseEntity<?> createCustomer(@RequestBody CustomerForm form) {
         this.customerService.createCustomer(form);

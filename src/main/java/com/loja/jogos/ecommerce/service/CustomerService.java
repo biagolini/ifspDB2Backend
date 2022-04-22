@@ -1,5 +1,6 @@
 package com.loja.jogos.ecommerce.service;
 
+import com.loja.jogos.ecommerce.dto.CustomerDto;
 import com.loja.jogos.ecommerce.dto.CustomerForm;
 import com.loja.jogos.ecommerce.entity.Customer;
 import com.loja.jogos.ecommerce.repository.CustomerRepository;
@@ -30,10 +31,15 @@ public class CustomerService {
         return this.customerRepository.findAll(CustomerSpecification.likeGenericQuery(query),pageable);
     }
 
-    public Page<Customer> findAll(Pageable pageable, String firstName, String lastName, String email, String cpf) {
-        return this.customerRepository.findAll(CustomerSpecification.likeDescription(firstName, lastName, email, cpf),pageable);
+    public Page<Customer> findAll(Pageable pageable, String firstName, String lastName, String email, String cpf, Long state) {
+        return this.customerRepository.findAll(CustomerSpecification.likeDescription(firstName, lastName, email, cpf, state),pageable);
     }
 
+    public CustomerDto findCustomerByOd(Long id) {
+        Customer customer = customerRepository.findCustomerById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        CustomerDto response = new CustomerDto(customer);
+        return  response;
+    }
 
     public void  createCustomer(CustomerForm form) {
         Optional<Customer> conflictTestEmail = customerRepository.findCustomeByEmail(form.getEmail());
