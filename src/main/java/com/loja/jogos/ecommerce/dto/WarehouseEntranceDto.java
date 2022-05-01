@@ -9,12 +9,12 @@ import lombok.Setter;
 public class WarehouseEntranceDto {
 
     private Long id;
-    private Long gamePlataform;
+    private Long gamePlatform;
     private Long quantity;
 
     public WarehouseEntranceDto(WarehouseEntrance warehouseEntrancey) {
         this.id = warehouseEntrancey.getId();
-        this.gamePlataform = warehouseEntrancey.getGamePlataform();
+        this.gamePlatform = warehouseEntrancey.getGamePlatform();
         this.quantity = warehouseEntrancey.getQuantity();
     }
 }

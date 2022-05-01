@@ -4,18 +4,22 @@ import com.loja.jogos.ecommerce.entity.Price;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class PriceDto {
 
     private Long id;
-    private Long gamePlataform;
+    private Long gamePlatform;
+    private LocalDateTime dateTimePublish;
     private double value;
-
 
     public PriceDto(Price price) {
         this.id = price.getId();
-        this.gamePlataform = price.getGamePlataform();
+        this.gamePlatform = price.getGamePlatform();
+        this.dateTimePublish = price.getDateTimePublish();
         this.value = price.getValue();
     }
+
 }

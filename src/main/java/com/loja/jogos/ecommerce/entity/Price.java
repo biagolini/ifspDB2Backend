@@ -3,6 +3,7 @@ package com.loja.jogos.ecommerce.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tblPrice")
@@ -18,11 +19,14 @@ public class Price {
     @Column(name = "idPrice")
     private Long id;
 
-    @Column(name = "idGamePlataform")
-    private Long gamePlataform;
+    @Column(name = "idGamePlatform")
+    private Long gamePlatform;
 
     @Column(name = "dsValue")
     private double value;
+
+    @Column(name = "dsDateTimePublish")
+    private LocalDateTime dateTimePublish;
 
     @Column(name = "stActive")
     private Boolean isActive;

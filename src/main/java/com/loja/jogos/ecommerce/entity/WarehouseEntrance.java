@@ -18,8 +18,8 @@ public class WarehouseEntrance {
     @Column(name = "idWarehouseEntrance")
     private Long id;
 
-    @Column(name = "idGamePlataform")
-    private Long gamePlataform;
+    @Column(name = "idGamePlatform")
+    private Long gamePlatform;
 
     @Column(name = "dsQuantity")
     private Long quantity;

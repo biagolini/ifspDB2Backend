@@ -6,17 +6,17 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "tblGamePlataform")
+@Table(name = "tblGamePlatform")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GamePlataform {
+public class GamePlatform {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idGamePlataform")
+    @Column(name = "idGamePlatform")
     private Long id;
 
     @JoinColumn(name = "idGame")
