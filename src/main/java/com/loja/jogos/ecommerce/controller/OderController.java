@@ -25,16 +25,16 @@ public class OderController {
     @GetMapping
     public @ResponseBody
     Page<OrderDto> findAllPaginated(
-            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) Long idCustomer,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String cpf,
             Pageable pageable
     ) {
-        if (id == null && username == null && cpf == null) { // Busca sem nenhum parametro
+        if (idCustomer == null && username == null && cpf == null) { // Busca sem nenhum parametro
             return this.orderService.findAll(pageable).map(entity -> this.conversionService.convert(entity, OrderDto.class));
         }
             return this.orderService // Busca com dados de perfil
-                    .findByDescription(pageable, id, username, cpf)
+                    .findByDescription(pageable, idCustomer, username, cpf)
                     .map(entity -> this.conversionService.convert(entity, OrderDto.class));
     }
 

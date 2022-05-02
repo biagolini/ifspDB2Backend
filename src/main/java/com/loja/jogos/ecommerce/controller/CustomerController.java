@@ -2,7 +2,6 @@ package com.loja.jogos.ecommerce.controller;
 
 import com.loja.jogos.ecommerce.dto.CustomerDto;
 import com.loja.jogos.ecommerce.dto.CustomerForm;
-import com.loja.jogos.ecommerce.dto.TypeGenreDto;
 import com.loja.jogos.ecommerce.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/customer")

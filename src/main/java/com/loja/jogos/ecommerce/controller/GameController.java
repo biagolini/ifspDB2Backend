@@ -3,6 +3,7 @@ package com.loja.jogos.ecommerce.controller;
 import com.loja.jogos.ecommerce.dto.GameDto;
 import com.loja.jogos.ecommerce.dto.HighlightDto;
 import com.loja.jogos.ecommerce.service.GameService;
+import com.loja.jogos.ecommerce.service.PriceService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,8 @@ public class GameController {
 
     private final GameService gameService;
 
+    private final PriceService priceService;
+
     @GetMapping
     public @ResponseBody
     Page<GameDto> findAllPaginated(
@@ -27,14 +30,18 @@ public class GameController {
             @RequestParam(required = false) Long genre,
             @PageableDefault(sort = "releaseDate", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable
     ) {
+        Page<GameDto> pageReturnObject;
+
         if (name == null && genre == null) { // Busca sem nenhum parametro
-            return this.gameService
-                    .findAll(pageable)
-                    .map(entity -> this.conversionService.convert(entity, GameDto.class));
+            pageReturnObject = this.gameService
+                                .findAll(pageable)
+                                .map(entity -> this.conversionService.convert(entity, GameDto.class));
         }
-        return this.gameService // Busca com dados de perfil
-                .findAll(pageable, name, genre)
-                .map(entity -> this.conversionService.convert(entity, GameDto.class));
+        pageReturnObject=  this.gameService // Busca com dados de perfil
+                            .findAll(pageable, name, genre)
+                            .map(entity -> this.conversionService.convert(entity, GameDto.class));
+        pageReturnObject = this.priceService.fillBestPrice(pageReturnObject);
+        return pageReturnObject;
     }
 
     @GetMapping("/platform/{id}")
@@ -43,9 +50,12 @@ public class GameController {
             @PathVariable Long id,
             @PageableDefault(sort = "dsReleaseDate", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable
     ) {
-        return this.gameService
+        Page<GameDto> pageReturnObject = this.gameService
                 .findByidTypePlatform(pageable, id)
                 .map(entity -> this.conversionService.convert(entity, GameDto.class));
+
+        pageReturnObject = this.priceService.fillBestPrice(pageReturnObject);
+        return pageReturnObject;
     }
 
 

@@ -1,6 +1,5 @@
 package com.loja.jogos.ecommerce.dto;
 
-
 import com.loja.jogos.ecommerce.entity.Game;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +16,7 @@ public class GameDto {
     private Long genre;
     private Long publisher;
     private String cover;
+    private Double bestPrice;
 
     public GameDto(Game game) {
         this.id = game.getId();

@@ -23,26 +23,26 @@ public class TypeController {
 
     @GetMapping("/getGenre")
     public ResponseEntity<?> getGenre() {
-        List<TypeGenreDto> response = this.typeService.getGenre();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        List<TypeGenreDto> dto = this.typeService.getGenre();
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @GetMapping("/getPlatform")
     public ResponseEntity<?> getPlatform() {
-        List<TypePlatformDto> response = this.typeService.getPlatform();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        List<TypePlatformDto> dto = this.typeService.getPlatform();
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @GetMapping("/getState")
     public ResponseEntity<?> getState() {
-        List<TypeStateDto> response = this.typeService.getState();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        List<TypeStateDto> dto = this.typeService.getState();
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @GetMapping("/getStatusOrder")
     public ResponseEntity<?> getStatusOrder() {
-        List<TypeStatusOrderDto> response = this.typeService.getStatusOrder();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        List<TypeStatusOrderDto> dto = this.typeService.getStatusOrder();
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
 }
