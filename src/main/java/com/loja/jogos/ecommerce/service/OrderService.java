@@ -1,10 +1,12 @@
 package com.loja.jogos.ecommerce.service;
 
-import com.loja.jogos.ecommerce.dto.OrderForm;
+import com.loja.jogos.ecommerce.dto.*;
 import com.loja.jogos.ecommerce.entity.Customer;
+import com.loja.jogos.ecommerce.entity.Iten;
 import com.loja.jogos.ecommerce.entity.Order;
 import com.loja.jogos.ecommerce.entity.TypeStatusOrder;
 import com.loja.jogos.ecommerce.repository.CustomerRepository;
+import com.loja.jogos.ecommerce.repository.ItenRepository;
 import com.loja.jogos.ecommerce.repository.OrderRepository;
 import com.loja.jogos.ecommerce.repository.TypeStatusOrderRepository;
 import com.loja.jogos.ecommerce.repository.specifications.OrderSpecification;
@@ -15,6 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class OrderService {
@@ -22,6 +27,8 @@ public class OrderService {
     private final CustomerRepository customerRepository;
 
     private final OrderRepository orderRepository;
+
+    private final ItenRepository itenRepository;
 
     private final TypeStatusOrderRepository typeStatusOrderRepository;
 
@@ -46,5 +53,31 @@ public class OrderService {
         order.updateStatus(form, typeStatusOrder);
     }
 
+    public OrderDto fillCustomerInfo(OrderDto orderDto){
+        Customer customer = customerRepository.findById(orderDto.getIdCustomer()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        orderDto.setFirstName(customer.getFirstName());
+        orderDto.setLastName(customer.getLastName());
+        orderDto.setEmail(customer.getEmail());
+        return orderDto;
+    }
 
+    public OrderWrapperDto findOrderProfileById(Long id){
+        OrderWrapperDto response = new OrderWrapperDto();
+        Order order = orderRepository.findOrderById(id).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Order not found"));
+        OrderDto orderDto = new OrderDto(order);
+        response.setOrder(this.fillCustomerInfo(orderDto));
+        List<Iten> itens = itenRepository.findByOrder(order);
+        List<ItenDto> itensDto = new ArrayList<>();
+        for(int i=0;i<itens.size();i++) itensDto.add(new ItenDto(itens.get(i)));
+        response.setItens(itensDto);
+        return  response;
+    }
+
+   public Page<OrderDto> fillCustomerPageInfo(Page<OrderDto> pageReturnObject) {
+        for(int i =0; i<pageReturnObject.getContent().size();i++){
+            // Ao que indica, o pageReturnObject é estático
+            fillCustomerInfo(pageReturnObject.getContent().get(i));
+        }
+        return pageReturnObject;
+    }
 }

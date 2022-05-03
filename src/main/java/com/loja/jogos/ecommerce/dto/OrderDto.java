@@ -4,23 +4,28 @@ import com.loja.jogos.ecommerce.entity.Order;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class OrderDto {
 
     private Long id;
-    private Long idPrice;
     private Long idCustomer;
+    private String firstName;
+    private String lastName;
+    private String email;
     private Long idTypeStatusOrder;
-    private Long quantity;
+    private LocalDateTime dateTimeOrder;
+    private Double totalValue;
     private String trackingCode;
 
     public OrderDto(Order order) {
         this.id = order.getId();
-        this.idPrice = order.getIdPrice();
         this.idCustomer = order.getCustomer().getId();
         this.idTypeStatusOrder = order.getTypeStatusOrder().getId();
-        this.quantity = order.getQuantity();
+        this.dateTimeOrder = order.getDateTimeOrder();
+        this.totalValue = order.getTotalValue();
         this.trackingCode = order.getTrackingCode();
     }
 }

@@ -2,6 +2,7 @@ package com.loja.jogos.ecommerce.controller;
 
 import com.loja.jogos.ecommerce.dto.CustomerDto;
 import com.loja.jogos.ecommerce.dto.CustomerForm;
+import com.loja.jogos.ecommerce.dto.GameDto;
 import com.loja.jogos.ecommerce.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -35,23 +36,24 @@ public class CustomerController {
             Pageable pageable
     ){
         if(query==null && firstName==null && lastName==null && email==null && cpf==null && state==null) { // Busca sem nenhum parametro
-            return this.customerService
+            Page<CustomerDto> pageReturnObject = this.customerService
                     .findAll(pageable)
                     .map(entity -> this.conversionService.convert(entity, CustomerDto.class));
 
         } else if(query!=null && firstName==null && lastName==null && email==null && cpf==null && state==null ){ // Busca com uma query generica
-            return this.customerService
+            Page<CustomerDto> pageReturnObject = this.customerService
                     .findAll(pageable,query)
                     .map(entity -> this.conversionService.convert(entity,CustomerDto.class));
         }
-        return this.customerService // Busca com dados de perfil
+        Page<CustomerDto> pageReturnObject = this.customerService // Busca com dados de perfil
                 .findAll(pageable,firstName, lastName, email, cpf, state)
                 .map(entity -> this.conversionService.convert(entity,CustomerDto.class));
+        return pageReturnObject;
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findCustomerByOd(@PathVariable Long id) {
+    public ResponseEntity<?> findCustomerById(@PathVariable Long id) {
         CustomerDto response = this.customerService.findCustomerByOd(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

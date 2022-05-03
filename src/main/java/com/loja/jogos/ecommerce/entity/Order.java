@@ -4,6 +4,7 @@ import com.loja.jogos.ecommerce.dto.OrderForm;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tblOrder")
@@ -19,29 +20,27 @@ public class Order {
     @Column(name = "idOrder")
     private Long id;
 
-    @Column(name = "idPrice")
-    private Long idPrice;
-
     @JoinColumn(name = "idCustomer")
     @ManyToOne
     private Customer customer;
-
 
     @JoinColumn(name = "idTypeStatusOrder")
     @ManyToOne
     private TypeStatusOrder typeStatusOrder;
 
-    @Column(name = "dsQuantity")
-    private Long quantity;
+    @Column(name = "dsDateTimeOrder")
+    private LocalDateTime dateTimeOrder;
+
+    @Column(name = "dsTotalValue")
+    private Double totalValue;
 
     @Column(name = "dsTrackingCode")
     private String trackingCode;
 
     public Order(OrderForm form, Customer customer, TypeStatusOrder typeStatusOrder) {
-        this.idPrice = form.getIdPrice();
         this.customer = customer;
         this.typeStatusOrder = typeStatusOrder;
-        this.quantity = form.getQuantity();
+        this.dateTimeOrder = LocalDateTime.now();
         this.trackingCode = form.getTrackingCode();
     }
 

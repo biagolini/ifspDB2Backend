@@ -11,10 +11,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GameOfferWrapperDto {
+public class OrderWrapperDto {
 
-    private GameDto game;
-    private List<MediaDto> medias;
-    private List<PriceDto> prices;
+    private OrderDto order;
+    private List<ItenDto> itens;
 
 }

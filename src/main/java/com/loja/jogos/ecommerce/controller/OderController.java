@@ -1,12 +1,16 @@
 package com.loja.jogos.ecommerce.controller;
 
+import com.loja.jogos.ecommerce.dto.CustomerDto;
 import com.loja.jogos.ecommerce.dto.OrderDto;
 import com.loja.jogos.ecommerce.dto.OrderForm;
+import com.loja.jogos.ecommerce.dto.OrderWrapperDto;
 import com.loja.jogos.ecommerce.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,14 +32,18 @@ public class OderController {
             @RequestParam(required = false) Long idCustomer,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String cpf,
-            Pageable pageable
+            @PageableDefault(sort = "dateTimeOrder", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable
     ) {
         if (idCustomer == null && username == null && cpf == null) { // Busca sem nenhum parametro
-            return this.orderService.findAll(pageable).map(entity -> this.conversionService.convert(entity, OrderDto.class));
+            Page<OrderDto> pageReturnObject = this.orderService.findAll(pageable).map(entity -> this.conversionService.convert(entity, OrderDto.class));
         }
-            return this.orderService // Busca com dados de perfil
+        Page<OrderDto> pageReturnObject = this.orderService // Busca com dados de perfil
                     .findByDescription(pageable, idCustomer, username, cpf)
                     .map(entity -> this.conversionService.convert(entity, OrderDto.class));
+
+        pageReturnObject = this.orderService.fillCustomerPageInfo(pageReturnObject);
+
+        return pageReturnObject;
     }
 
     @PostMapping()
@@ -52,5 +60,10 @@ public class OderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/orderProfile/{id}")
+    public ResponseEntity<?> findOrderProfileById(@PathVariable Long id) {
+        OrderWrapperDto response = this.orderService.findOrderProfileById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
 }
