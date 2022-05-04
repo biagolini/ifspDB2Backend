@@ -1,14 +1,8 @@
 package com.loja.jogos.ecommerce.service;
 
 import com.loja.jogos.ecommerce.dto.*;
-import com.loja.jogos.ecommerce.entity.Customer;
-import com.loja.jogos.ecommerce.entity.Iten;
-import com.loja.jogos.ecommerce.entity.Order;
-import com.loja.jogos.ecommerce.entity.TypeStatusOrder;
-import com.loja.jogos.ecommerce.repository.CustomerRepository;
-import com.loja.jogos.ecommerce.repository.ItenRepository;
-import com.loja.jogos.ecommerce.repository.OrderRepository;
-import com.loja.jogos.ecommerce.repository.TypeStatusOrderRepository;
+import com.loja.jogos.ecommerce.entity.*;
+import com.loja.jogos.ecommerce.repository.*;
 import com.loja.jogos.ecommerce.repository.specifications.OrderSpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,18 +20,26 @@ public class OrderService {
 
     private final CustomerRepository customerRepository;
 
-    private final OrderRepository orderRepository;
+    private final GamePlatformRepository gamePlatformRepository;
+
+    private final GameRepository gameRepository;
 
     private final ItenRepository itenRepository;
 
+    private final OrderRepository orderRepository;
+
+    private final PriceRepository priceRepository;
+
     private final TypeStatusOrderRepository typeStatusOrderRepository;
 
+
     public Page<Order> findAll(Pageable pageable) {
+        System.out.println("ENTREI");
         return  this.orderRepository.findAll(pageable);
     }
 
-    public Page<Order> findByDescription(Pageable pageable, Long id, String username, String cpf) {
-        return this.orderRepository.findAll(OrderSpecification.likeDescription(id, username, cpf), pageable);
+    public Page<Order> findByDescription(Pageable pageable, Long id, String username, String cpf,  String queryString) {
+        return this.orderRepository.findAll(OrderSpecification.likeDescription(id, username, cpf,  queryString), pageable);
     }
 
     public void  createOrder(OrderForm form) {
@@ -61,6 +63,20 @@ public class OrderService {
         return orderDto;
     }
 
+    public ItenDto fillItenInfo(ItenDto itenDto){
+        Price price = priceRepository.findById(itenDto.getIdPrice()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Price not found"));;
+        itenDto.setUnityValue(price.getValue());
+        itenDto.setSubTotal(itenDto.getUnityValue()*itenDto.getQuantity());
+        GamePlatform gamePlatform = gamePlatformRepository.findById(price.getGamePlatform()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"GamePlatform not found"));;
+        itenDto.setTypePlatformId(gamePlatform.getPlatform().getId());
+        Long gameId = gamePlatform.getGame().getId();
+        itenDto.setGameId(gameId);
+        Game game = gameRepository.findById(gameId).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game not found"));
+        itenDto.setGameName(game.getName());
+        itenDto.setGameCover(game.getCover());
+        return itenDto;
+    }
+
     public OrderWrapperDto findOrderProfileById(Long id){
         OrderWrapperDto response = new OrderWrapperDto();
         Order order = orderRepository.findOrderById(id).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Order not found"));
@@ -68,7 +84,11 @@ public class OrderService {
         response.setOrder(this.fillCustomerInfo(orderDto));
         List<Iten> itens = itenRepository.findByOrder(order);
         List<ItenDto> itensDto = new ArrayList<>();
-        for(int i=0;i<itens.size();i++) itensDto.add(new ItenDto(itens.get(i)));
+        for(int i=0;i<itens.size();i++) {
+            ItenDto newItenDto = new ItenDto(itens.get(i));
+            this.fillItenInfo(newItenDto);
+            itensDto.add(newItenDto);
+        }
         response.setItens(itensDto);
         return  response;
     }

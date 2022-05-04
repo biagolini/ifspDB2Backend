@@ -32,18 +32,18 @@ public class OderController {
             @RequestParam(required = false) Long idCustomer,
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String cpf,
+            @RequestParam(required = false) String query,
             @PageableDefault(sort = "dateTimeOrder", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable
     ) {
-        if (idCustomer == null && username == null && cpf == null) { // Busca sem nenhum parametro
+        if (idCustomer == null && username == null && cpf == null && query == null) { // Busca sem nenhum parametro
             Page<OrderDto> pageReturnObject = this.orderService.findAll(pageable).map(entity -> this.conversionService.convert(entity, OrderDto.class));
+            return  this.orderService.fillCustomerPageInfo(pageReturnObject);
         }
         Page<OrderDto> pageReturnObject = this.orderService // Busca com dados de perfil
-                    .findByDescription(pageable, idCustomer, username, cpf)
+                    .findByDescription(pageable, idCustomer, username, cpf, query)
                     .map(entity -> this.conversionService.convert(entity, OrderDto.class));
+        return this.orderService.fillCustomerPageInfo(pageReturnObject);
 
-        pageReturnObject = this.orderService.fillCustomerPageInfo(pageReturnObject);
-
-        return pageReturnObject;
     }
 
     @PostMapping()

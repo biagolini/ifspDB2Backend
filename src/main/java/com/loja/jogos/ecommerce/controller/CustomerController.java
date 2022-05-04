@@ -39,11 +39,13 @@ public class CustomerController {
             Page<CustomerDto> pageReturnObject = this.customerService
                     .findAll(pageable)
                     .map(entity -> this.conversionService.convert(entity, CustomerDto.class));
+            return pageReturnObject;
 
         } else if(query!=null && firstName==null && lastName==null && email==null && cpf==null && state==null ){ // Busca com uma query generica
             Page<CustomerDto> pageReturnObject = this.customerService
                     .findAll(pageable,query)
                     .map(entity -> this.conversionService.convert(entity,CustomerDto.class));
+            return pageReturnObject;
         }
         Page<CustomerDto> pageReturnObject = this.customerService // Busca com dados de perfil
                 .findAll(pageable,firstName, lastName, email, cpf, state)

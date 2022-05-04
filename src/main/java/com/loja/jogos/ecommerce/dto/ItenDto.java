@@ -10,8 +10,14 @@ public class ItenDto {
 
     private Long id;
     private Long orderId;
-    private Long idPrice;
     private Integer quantity;
+    private String gameName;
+    private Long gameId;
+    private Long typePlatformId;
+    private String gameCover;
+    private Double unityValue;
+    private Double subTotal;
+    private Long idPrice;
 
 
     public ItenDto(Iten iten) {
@@ -20,4 +26,7 @@ public class ItenDto {
         this.idPrice = iten.getIdPrice();
         this.quantity = iten.getQuantity();
     }
+
+
+
 }
