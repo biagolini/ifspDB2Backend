@@ -37,11 +37,10 @@ public class Order {
     @Column(name = "dsTrackingCode")
     private String trackingCode;
 
-    public Order(OrderForm form, Customer customer, TypeStatusOrder typeStatusOrder) {
+    public Order(Customer customer, TypeStatusOrder typeStatusOrder) {
         this.customer = customer;
         this.typeStatusOrder = typeStatusOrder;
         this.dateTimeOrder = LocalDateTime.now();
-        this.trackingCode = form.getTrackingCode();
     }
 
     public void updateStatus(OrderForm form, TypeStatusOrder typeStatusOrder) {

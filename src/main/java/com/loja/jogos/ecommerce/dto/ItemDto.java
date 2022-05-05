@@ -1,12 +1,12 @@
 package com.loja.jogos.ecommerce.dto;
 
-import com.loja.jogos.ecommerce.entity.Iten;
+import com.loja.jogos.ecommerce.entity.Item;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ItenDto {
+public class ItemDto {
 
     private Long id;
     private Long orderId;
@@ -20,11 +20,11 @@ public class ItenDto {
     private Long idPrice;
 
 
-    public ItenDto(Iten iten) {
-        this.id = iten.getId();
-        this.orderId = iten.getOrder().getId();
-        this.idPrice = iten.getIdPrice();
-        this.quantity = iten.getQuantity();
+    public ItemDto(Item item) {
+        this.id = item.getId();
+        this.orderId = item.getOrder().getId();
+        this.idPrice = item.getIdPrice();
+        this.quantity = item.getQuantity();
     }
 
 

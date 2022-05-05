@@ -14,6 +14,6 @@ import java.util.List;
 public class OrderWrapperDto {
 
     private OrderDto order;
-    private List<ItenDto> itens;
+    private List<ItemDto> itens;
 
 }

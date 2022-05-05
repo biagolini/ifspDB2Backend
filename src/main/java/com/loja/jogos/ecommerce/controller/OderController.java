@@ -1,9 +1,6 @@
 package com.loja.jogos.ecommerce.controller;
 
-import com.loja.jogos.ecommerce.dto.CustomerDto;
-import com.loja.jogos.ecommerce.dto.OrderDto;
-import com.loja.jogos.ecommerce.dto.OrderForm;
-import com.loja.jogos.ecommerce.dto.OrderWrapperDto;
+import com.loja.jogos.ecommerce.dto.*;
 import com.loja.jogos.ecommerce.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -57,8 +54,27 @@ public class OderController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> createOrder(@RequestBody OrderForm form) {
+    public ResponseEntity<?> createOrder(@RequestBody OrderWrapperForm form) {
         this.orderService.createOrder(form);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @PutMapping("/reviewOrderValue/{id}")
+    public ResponseEntity<?> reviewOrderTotalValueById(@PathVariable Long id) {
+        this.orderService.reviewOrderTotalValueById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/reviewAllOrdersValue")
+    public ResponseEntity<?> reviewAllOrdersValue() {
+        this.orderService.reviewAllOrdersValue();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/cancelNotPaidOneWeekOldOrders")
+    public ResponseEntity<?> cancelNotPaidOneWeekOldOrders() {
+        this.orderService.cancelNotPaidOneWeekOldOrders();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

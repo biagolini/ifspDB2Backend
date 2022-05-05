@@ -4,16 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderForm {
+public class OrderWrapperForm {
 
-    private Long idCustomer;
-    private Long idTypeStatusOrder;
-    private Long quantity;
-    private String trackingCode;
+    private List<ItemForm> itens;
 
 }
-
-

@@ -18,4 +18,5 @@ public interface TypeStatusOrderRepository  extends JpaRepository<TypeStatusOrde
     @Query(value = "SELECT a FROM TypeStatusOrder a WHERE a.isActive = true")
     List<TypeStatusOrder> findAll();
 
+
 }

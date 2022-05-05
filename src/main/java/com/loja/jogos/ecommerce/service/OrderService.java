@@ -11,8 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -24,7 +26,7 @@ public class OrderService {
 
     private final GameRepository gameRepository;
 
-    private final ItenRepository itenRepository;
+    private final ItemRepository itemRepository;
 
     private final OrderRepository orderRepository;
 
@@ -45,12 +47,99 @@ public class OrderService {
         return this.orderRepository.findAll(OrderSpecification.likeDescription(orderStatus, idOrder, idCustomer, username, firstName, lastName, email, cpf), pageable);
     }
 
-    public void  createOrder(OrderForm form) {
-        Customer customer = customerRepository.findCustomerById(form.getIdCustomer()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid User"));
-        TypeStatusOrder typeStatusOrder = typeStatusOrderRepository.findById(form.getIdTypeStatusOrder()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid TypeStatusOrder ID"));
-        Order newRegister = new Order(form, customer, typeStatusOrder);
-        orderRepository.save(newRegister);
+    public void  createOrder(OrderWrapperForm form) {
+        // Validar id de usuário
+        Long customerId = 1L; // Atualizar para Id do token
+        // Validar quantidade de itens
+        if(form.getItens().size()<1) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"No itens found");
+        // Validar as ids de preço
+        List<Price> priceList = new ArrayList<>();
+        for(int i=0;i<form.getItens().size();i++) {
+            Price price = priceRepository.findById(form.getItens().get(i).getIdPrice()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid price ID"));
+            priceList.add(price);
+        }
+        // Criar ordem
+        Customer customer = customerRepository.findCustomerById(customerId).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid User"));
+        TypeStatusOrder typeStatusOrder = typeStatusOrderRepository.findById(1L).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid TypeStatusOrder ID"));
+        Order newOrder = new Order(customer, typeStatusOrder);
+        orderRepository.save(newOrder);
+        Double totalOrder = 0D;
+        List<Item> itens = new ArrayList<>();
+        for(int i=0;i<form.getItens().size();i++) {
+            Item newItem = new Item(newOrder, form.getItens().get(i));
+            totalOrder = totalOrder + (priceList.get(i).getValue() * newItem.getQuantity());
+            itemRepository.save(newItem);
+        }
+        newOrder.setTotalValue(totalOrder);
+        orderRepository.save(newOrder);
     }
+
+    public void  reviewOrderTotalValueById(Long id) {
+        Order order = orderRepository.findOrderById(id).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Order not found"));
+        List<Item> itens = itemRepository.findByOrder(order);
+        List<Price> priceList = new ArrayList<>();
+        for(int i=0;i<itens.size();i++) {
+            Price price = priceRepository.findById(itens.get(i).getIdPrice()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid price ID"));
+            priceList.add(price);
+        }
+        Double totalOrder = 0D;
+        for(int i=0;i<itens.size();i++) {
+            totalOrder = totalOrder + (priceList.get(i).getValue() * itens.get(i).getQuantity());
+        }
+        order.setTotalValue(totalOrder);
+        orderRepository.save(order);
+    }
+
+    public void  reviewAllOrdersValue() {
+        List<Order> orderList = orderRepository.findAll();
+        for(Order order: orderList){
+            List<Item> itens = itemRepository.findByOrder(order);
+            List<Price> priceList = new ArrayList<>();
+            for(int i=0;i<itens.size();i++) {
+                Price price = priceRepository.findById(itens.get(i).getIdPrice()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid price ID"));
+                priceList.add(price);
+            }
+            Double totalOrder = 0D;
+            for(int i=0;i<itens.size();i++) {
+                totalOrder = totalOrder + (priceList.get(i).getValue() * itens.get(i).getQuantity());
+            }
+            order.setTotalValue(totalOrder);
+            orderRepository.save(order);
+        }
+    }
+
+    public void  cancelNotPaidOneWeekOldOrders() {
+        List<Order> orderList = orderRepository.findAll();
+        LocalDateTime thresholdDateTimeOrder = LocalDateTime.now();
+        thresholdDateTimeOrder.minusWeeks(1); // Limiar para cancelamento de compras é de 1 semana até a data de hoje
+        Optional<TypeStatusOrder> canceledTypeStatusOrder = typeStatusOrderRepository.findById(6L);
+
+        for(Order order: orderList){
+            if(order.getDateTimeOrder().isBefore(thresholdDateTimeOrder) && order.getTypeStatusOrder().getId()==1L ){
+                order.setTypeStatusOrder(canceledTypeStatusOrder.get());
+                orderRepository.save(order);
+            }
+        }
+    }
+
+
+
+
+    public void  reviewOrderTotalValue(Order order) {
+        List<Item> itens = itemRepository.findByOrder(order);
+        List<Price> priceList = new ArrayList<>();
+        for(int i=0;i<itens.size();i++) {
+            Price price = priceRepository.findById(itens.get(i).getIdPrice()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid price ID"));
+            priceList.add(price);
+        }
+        Double totalOrder = 0D;
+        for(int i=0;i<itens.size();i++) {
+            totalOrder = totalOrder + (priceList.get(i).getValue() * itens.get(i).getQuantity());
+        }
+        order.setTotalValue(totalOrder);
+        orderRepository.save(order);
+    }
+
 
     public void  UpdateStatus(Long id, OrderForm form) {
         Order order = orderRepository.findOrderById(id).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Order not found"));
@@ -66,18 +155,18 @@ public class OrderService {
         return orderDto;
     }
 
-    public ItenDto fillItenInfo(ItenDto itenDto){
-        Price price = priceRepository.findById(itenDto.getIdPrice()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Price not found"));;
-        itenDto.setUnityValue(price.getValue());
-        itenDto.setSubTotal(itenDto.getUnityValue()*itenDto.getQuantity());
+    public ItemDto fillItemInfo(ItemDto itemDto){
+        Price price = priceRepository.findById(itemDto.getIdPrice()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Price not found"));;
+        itemDto.setUnityValue(price.getValue());
+        itemDto.setSubTotal(itemDto.getUnityValue()* itemDto.getQuantity());
         GamePlatform gamePlatform = gamePlatformRepository.findById(price.getGamePlatform()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"GamePlatform not found"));;
-        itenDto.setTypePlatformId(gamePlatform.getPlatform().getId());
+        itemDto.setTypePlatformId(gamePlatform.getPlatform().getId());
         Long gameId = gamePlatform.getGame().getId();
-        itenDto.setGameId(gameId);
+        itemDto.setGameId(gameId);
         Game game = gameRepository.findById(gameId).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game not found"));
-        itenDto.setGameName(game.getName());
-        itenDto.setGameCover(game.getCover());
-        return itenDto;
+        itemDto.setGameName(game.getName());
+        itemDto.setGameCover(game.getCover());
+        return itemDto;
     }
 
     public OrderWrapperDto findOrderProfileById(Long id){
@@ -85,12 +174,12 @@ public class OrderService {
         Order order = orderRepository.findOrderById(id).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Order not found"));
         OrderDto orderDto = new OrderDto(order);
         response.setOrder(this.fillCustomerInfo(orderDto));
-        List<Iten> itens = itenRepository.findByOrder(order);
-        List<ItenDto> itensDto = new ArrayList<>();
+        List<Item> itens = itemRepository.findByOrder(order);
+        List<ItemDto> itensDto = new ArrayList<>();
         for(int i=0;i<itens.size();i++) {
-            ItenDto newItenDto = new ItenDto(itens.get(i));
-            this.fillItenInfo(newItenDto);
-            itensDto.add(newItenDto);
+            ItemDto newItemDto = new ItemDto(itens.get(i));
+            this.fillItemInfo(newItemDto);
+            itensDto.add(newItemDto);
         }
         response.setItens(itensDto);
         return  response;

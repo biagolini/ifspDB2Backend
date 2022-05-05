@@ -7,13 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderForm {
+public class ItemForm {
 
-    private Long idCustomer;
-    private Long idTypeStatusOrder;
-    private Long quantity;
-    private String trackingCode;
+    private Long idPrice;
+    private Integer quantity;
 
 }
-
-
