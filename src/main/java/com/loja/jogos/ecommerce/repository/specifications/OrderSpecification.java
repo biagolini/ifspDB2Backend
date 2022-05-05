@@ -1,8 +1,6 @@
 package com.loja.jogos.ecommerce.repository.specifications;
 
-import com.loja.jogos.ecommerce.entity.Customer_;
-import com.loja.jogos.ecommerce.entity.Order;
-import com.loja.jogos.ecommerce.entity.Order_;
+import com.loja.jogos.ecommerce.entity.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;
@@ -11,41 +9,94 @@ import java.util.List;
 
 public class OrderSpecification {
 
-    public static Specification<Order>  userIdEquals(Long info) {
+    // orderStatus
+    public static Specification<Order>  orderStatusEquals(Long info) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Order_.typeStatusOrder).get(TypeStatusOrder_.id) ,  info );
+    }
+
+    // idOrder
+    public static Specification<Order>  orderIdEquals(Long info) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Order_.id),  info );
+    }
+
+    //idCustomer
+    public static Specification<Order>  customerIdEquals(Long info) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Order_.customer).get(Customer_.id),  info );
     }
 
-    public static Specification<Order> userNameLike(String info) {
+    //username
+    public static Specification<Order>  customerUsernameLike(String info) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.USERNAME),  "%"+info +"%");
     }
 
-    public static Specification<Order> userNameEquals(String info) {
+    public static Specification<Order>  customerUsernameEquals(String info) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.USERNAME),  info );
     }
 
-    public static Specification<Order> userCpfLike(String info) {
+    //firstName
+    public static Specification<Order>  customerFirstNameLike(String info) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.FIRST_NAME),  "%"+info +"%");
+    }
+
+    public static Specification<Order>  customerFirstNameEquals(String info) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.FIRST_NAME),  info );
+    }
+
+    //lastName
+    public static Specification<Order>  customerLastNameLike(String info) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.LAST_NAME),  "%"+info +"%");
+    }
+
+    public static Specification<Order>  customerLastNameEquals(String info) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.LAST_NAME),  info );
+    }
+
+    //email
+    public static Specification<Order>  customerEmailLike(String info) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.EMAIL),  info );
+    }
+
+    public static Specification<Order>  customerEmailEquals(String info) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.EMAIL),  info );
+    }
+
+    //cpf
+    public static Specification<Order>  customerCpfLike(String info) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.CPF),  "%"+info +"%");
     }
 
-    public static Specification<Order> userCpfEquals(String info) {
+    public static Specification<Order> customerCpfEquals(String info) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.CPF),  info );
     }
 
-    public static Specification<Order> likeDescription(Long id, String username, String cpf, String queryString) {
+    public static Specification<Order> likeDescription(Long orderStatus, Long idOrder, Long idCustomer,
+                                                       String username, String firstName, String lastName,
+                                                       String email, String cpf) {
         return (root, query, criteriaBuilder) -> {
-            // ANDS
-            List<Predicate> predicatesAND = new ArrayList<>(3);
-            if (id != null) predicatesAND.add(userIdEquals(id).toPredicate(root, query, criteriaBuilder));
-            if (username != null) predicatesAND.add(userNameEquals(username).toPredicate(root, query, criteriaBuilder));
-            if (cpf != null) predicatesAND.add(userCpfEquals(cpf).toPredicate(root, query, criteriaBuilder));
-            Predicate ands = criteriaBuilder.and(predicatesAND.toArray(new Predicate[0]));
-            // ORS
-            List<Predicate> predicatesOR = new ArrayList<>(2);
-            predicatesOR.add(userNameLike(queryString).toPredicate(root,query,criteriaBuilder));
-            predicatesOR.add(userCpfLike(queryString).toPredicate(root,query,criteriaBuilder));
-            Predicate ors = criteriaBuilder.or(predicatesOR.toArray(new Predicate[0]));
-
-            return criteriaBuilder.and(ands,ors);
+            List<Predicate> predicatesAND = new ArrayList<>(8);
+            if (orderStatus != null) predicatesAND.add(orderStatusEquals(orderStatus).toPredicate(root, query, criteriaBuilder));
+            if (idOrder != null) predicatesAND.add(orderIdEquals(idOrder).toPredicate(root, query, criteriaBuilder));
+            if (idCustomer != null) predicatesAND.add(customerIdEquals(idCustomer).toPredicate(root, query, criteriaBuilder));
+            if (username != null) predicatesAND.add(customerUsernameEquals(username).toPredicate(root, query, criteriaBuilder));
+            if (firstName != null) predicatesAND.add(customerFirstNameEquals(firstName).toPredicate(root, query, criteriaBuilder));
+            if (lastName != null) predicatesAND.add(customerLastNameEquals(lastName).toPredicate(root, query, criteriaBuilder));
+            if (email != null) predicatesAND.add(customerEmailEquals(email).toPredicate(root, query, criteriaBuilder));
+            if (cpf != null) predicatesAND.add(customerCpfEquals(cpf).toPredicate(root, query, criteriaBuilder));
+            return  criteriaBuilder.and(predicatesAND.toArray(new Predicate[0]));
         };
     }
+
+    public static Specification<Order> likeGenericQuery(String queryString) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicatesOR = new ArrayList<>(5);
+            predicatesOR.add(customerUsernameLike(queryString).toPredicate(root,query,criteriaBuilder));
+            predicatesOR.add(customerFirstNameLike(queryString).toPredicate(root,query,criteriaBuilder));
+            predicatesOR.add(customerLastNameLike(queryString).toPredicate(root,query,criteriaBuilder));
+            predicatesOR.add(customerEmailLike(queryString).toPredicate(root,query,criteriaBuilder));
+            predicatesOR.add(customerCpfLike(queryString).toPredicate(root,query,criteriaBuilder));
+            return criteriaBuilder.or(predicatesOR.toArray(new Predicate[0]));
+        };
+    }
+
 }
+

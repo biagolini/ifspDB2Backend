@@ -26,4 +26,5 @@ public class GameDto {
         this.publisher = game.getPublisher();
         this.cover = game.getCover();
     }
+
 }

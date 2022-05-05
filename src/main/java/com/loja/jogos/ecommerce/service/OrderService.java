@@ -34,12 +34,15 @@ public class OrderService {
 
 
     public Page<Order> findAll(Pageable pageable) {
-        System.out.println("ENTREI");
         return  this.orderRepository.findAll(pageable);
     }
 
-    public Page<Order> findByDescription(Pageable pageable, Long id, String username, String cpf,  String queryString) {
-        return this.orderRepository.findAll(OrderSpecification.likeDescription(id, username, cpf,  queryString), pageable);
+    public Page<Order> findAll(Pageable pageable, String query) {
+        return this.orderRepository.findAll(OrderSpecification.likeGenericQuery(query), pageable);
+    }
+
+    public Page<Order> findAll(Pageable pageable, Long orderStatus, Long idOrder, Long idCustomer, String username, String firstName,String lastName,String email,String cpf) {
+        return this.orderRepository.findAll(OrderSpecification.likeDescription(orderStatus, idOrder, idCustomer, username, firstName, lastName, email, cpf), pageable);
     }
 
     public void  createOrder(OrderForm form) {

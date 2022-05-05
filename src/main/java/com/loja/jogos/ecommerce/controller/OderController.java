@@ -29,21 +29,31 @@ public class OderController {
     @GetMapping
     public @ResponseBody
     Page<OrderDto> findAllPaginated(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) Long orderStatus,
+            @RequestParam(required = false) Long idOrder,
             @RequestParam(required = false) Long idCustomer,
             @RequestParam(required = false) String username,
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String email,
             @RequestParam(required = false) String cpf,
-            @RequestParam(required = false) String query,
             @PageableDefault(sort = "dateTimeOrder", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable
     ) {
-        if (idCustomer == null && username == null && cpf == null && query == null) { // Busca sem nenhum parametro
+        if (query == null && idCustomer == null && orderStatus == null &&  idOrder == null &&  idCustomer == null &&  username == null &&  firstName == null
+                &&  lastName == null &&  email == null &&  cpf == null  ) { // Busca sem nenhum parametro
             Page<OrderDto> pageReturnObject = this.orderService.findAll(pageable).map(entity -> this.conversionService.convert(entity, OrderDto.class));
             return  this.orderService.fillCustomerPageInfo(pageReturnObject);
         }
-        Page<OrderDto> pageReturnObject = this.orderService // Busca com dados de perfil
-                    .findByDescription(pageable, idCustomer, username, cpf, query)
+        if (idCustomer != null || orderStatus != null ||  idOrder != null ||  idCustomer != null ||  username != null ||  firstName != null
+                ||  lastName != null ||  email != null ||  cpf != null  ) { // Tem pelo menos 1 parametro de busca
+            Page<OrderDto> pageReturnObject = this.orderService // Busca com dados de perfil
+                    .findAll(pageable, orderStatus, idOrder, idCustomer, username, firstName, lastName, email, cpf)
                     .map(entity -> this.conversionService.convert(entity, OrderDto.class));
-        return this.orderService.fillCustomerPageInfo(pageReturnObject);
-
+                    return this.orderService.fillCustomerPageInfo(pageReturnObject);
+        }
+        Page<OrderDto> pageReturnObject = this.orderService.findAll(pageable,query).map(entity -> this.conversionService.convert(entity, OrderDto.class));
+        return  this.orderService.fillCustomerPageInfo(pageReturnObject);
     }
 
     @PostMapping()
