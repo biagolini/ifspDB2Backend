@@ -123,8 +123,6 @@ public class OrderService {
     }
 
 
-
-
     public void  reviewOrderTotalValue(Order order) {
         List<Item> itens = itemRepository.findByOrder(order);
         List<Price> priceList = new ArrayList<>();

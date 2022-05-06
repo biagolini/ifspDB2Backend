@@ -24,7 +24,7 @@ public class PriceController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/bpl/{id}")
+    @GetMapping("/pricesOfGame/{id}")
     public @ResponseBody
     ResponseEntity<List<PriceDto>> findNewestPrices(@PathVariable Long id){
         List<PriceDto> response = this.priceService.findNewestPrices(id);
