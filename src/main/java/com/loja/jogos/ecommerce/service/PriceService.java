@@ -5,6 +5,7 @@ import com.loja.jogos.ecommerce.dto.GameOfferWrapperDto;
 import com.loja.jogos.ecommerce.dto.MediaDto;
 import com.loja.jogos.ecommerce.dto.PriceDto;
 import com.loja.jogos.ecommerce.entity.Game;
+import com.loja.jogos.ecommerce.entity.GamePlatform;
 import com.loja.jogos.ecommerce.entity.Media;
 import com.loja.jogos.ecommerce.entity.Price;
 import com.loja.jogos.ecommerce.repository.GamePlatformRepository;
@@ -21,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -49,18 +51,22 @@ public class PriceService {
 
         Boolean testAddNewGamePlatformPrice;
         if(prices.size()>0){
-            newestPrices.add(new PriceDto(prices.get(0)));
+            GamePlatform gamePlatform = gamePlatformRepository.findById(prices.get(0).getGamePlatform()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Gameplatform not found"));
+            newestPrices.add(new PriceDto(prices.get(0),gamePlatform));
             for(int i =1; i<prices.size();i++){
                 Long currentGamePlatform = prices.get(i).getGamePlatform();
                 LocalDateTime currentDateTime  = prices.get(i).getDateTimePublish();
                 testAddNewGamePlatformPrice = true;
+                gamePlatform = gamePlatformRepository.findById(prices.get(i).getGamePlatform()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Gameplatform not found"));
                 for(int z = 0; z < newestPrices.size();z++){
-                    if(currentGamePlatform==newestPrices.get(z).getGamePlatform()&&currentDateTime.isAfter(newestPrices.get(z).getDateTimePublish())){
-                        newestPrices.set(z, new PriceDto(prices.get(i)));
+                    if(currentGamePlatform==newestPrices.get(z).getIdPlatform()&&currentDateTime.isAfter(newestPrices.get(z).getDateTimePublish())){
+                        newestPrices.set(z, new PriceDto(prices.get(i),gamePlatform));
                     }
-                    if(currentGamePlatform==newestPrices.get(z).getGamePlatform()) testAddNewGamePlatformPrice = false;
+                    if(currentGamePlatform==newestPrices.get(z).getIdPlatform()) testAddNewGamePlatformPrice = false;
                 }
-                if(testAddNewGamePlatformPrice)  newestPrices.add(new PriceDto(prices.get(i)));
+                if(testAddNewGamePlatformPrice) {
+                    newestPrices.add(new PriceDto(prices.get(i),gamePlatform));
+                }
             }
         }
         return newestPrices;
