@@ -22,6 +22,15 @@ public class Highlight {
     @Column(name = "idGame")
     private Long game;
 
+    @Column(name = "dsHighlightHeader")
+    private String header;
+
+    @Column(name = "dsHighlightImage")
+    private String cover;
+
+    @Column(name = "dsHighlightDescription")
+    private String description;
+
     @Column(name = "dsPublicationDate")
     private LocalDate publicationDate;
 
