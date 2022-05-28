@@ -1,5 +1,6 @@
 package com.loja.jogos.ecommerce.entity;
 
+import com.loja.jogos.ecommerce.dto.PriceForm;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,5 +32,11 @@ public class Price {
     @Column(name = "stActive")
     private Boolean isActive;
 
+    public Price(PriceForm form) {
+        this.gamePlatform = form.getIdGamePlatform();
+        this.value = form.getValue();
+        this.dateTimePublish = LocalDateTime.now();
+        this.isActive = true;
+    }
 }
 

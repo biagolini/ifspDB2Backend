@@ -1,9 +1,6 @@
 package com.loja.jogos.ecommerce.service;
 
-import com.loja.jogos.ecommerce.dto.GameDto;
-import com.loja.jogos.ecommerce.dto.GameOfferWrapperDto;
-import com.loja.jogos.ecommerce.dto.MediaDto;
-import com.loja.jogos.ecommerce.dto.PriceDto;
+import com.loja.jogos.ecommerce.dto.*;
 import com.loja.jogos.ecommerce.entity.Game;
 import com.loja.jogos.ecommerce.entity.GamePlatform;
 import com.loja.jogos.ecommerce.entity.Media;
@@ -104,5 +101,17 @@ public class PriceService {
         List<PriceDto> prices = this.findNewestPrices(id);
         dto.setPrices(prices);
         return dto;
+    }
+
+    public void createPrice(PriceForm form) {
+        // Desativar preços antigos - Não é possivel fazer a desativação por um Trigger no SQL, porque não é possivel atualizar uma tabela quando está inserindo dado nela mesma, se não você cairia num loop infinito
+        List<Price> oldPrices = priceRepository.findByGamePlatformID(form.getIdGamePlatform());
+        for(Price item: oldPrices){
+            item.setIsActive(false);
+            priceRepository.save(item);
+        }
+        // Criar novo item de preço
+        Price price = new Price(form);
+        priceRepository.save(price);
     }
 }

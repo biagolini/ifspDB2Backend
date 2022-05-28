@@ -16,6 +16,7 @@ public interface PriceRepository  extends JpaRepository<Price,Long> , JpaSpecifi
             "AND idGamePlatform IN (SELECT idGamePlatform FROM tblGamePlatform WHERE  idGame = :idGame AND stActive = 1)" ,  nativeQuery = true)
     List<Price> findByGameID(Long idGame);
 
-
+    @Query("SELECT a FROM Price a WHERE a.gamePlatform = :gamePlatform  AND a.isActive = true")
+    List<Price> findByGamePlatformID(Long gamePlatform);
 
 }

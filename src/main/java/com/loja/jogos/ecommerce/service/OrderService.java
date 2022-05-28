@@ -36,6 +36,7 @@ public class OrderService {
 
     private final CheckJwtInfoService checkJwtInfoService;
 
+    private final WarehouseEntranceRepository warehouseEntranceRepository;
 
     public Page<Order> findAll(Pageable pageable) {
         return  this.orderRepository.findAll(pageable);
@@ -70,12 +71,19 @@ public class OrderService {
         Double totalOrder = 0D;
         List<Item> itens = new ArrayList<>();
         for(int i=0;i<form.getItens().size();i++) {
+            // IMPLEMENTAR A LÓGICA DE CONFERIR SE TEM NO ESTOQUE
+
+
+
+
+
+
             Item newItem = new Item(newOrder, form.getItens().get(i));
-            totalOrder = totalOrder + (priceList.get(i).getValue() * newItem.getQuantity());
+            //  totalOrder = totalOrder + (priceList.get(i).getValue() * newItem.getQuantity()); // Não é mais necessario fazer este calculo, pois na ultima versão do banco de daos, definimos um trigger para executar essa função
             itemRepository.save(newItem);
         }
-        newOrder.setTotalValue(totalOrder);
-        orderRepository.save(newOrder);
+        // newOrder.setTotalValue(totalOrder);// Não é mais necessario fazer este calculo, pois na ultima versão do banco de daos, definimos um trigger para executar essa função
+
     }
 
     public void  reviewOrderTotalValueById(Long id) {

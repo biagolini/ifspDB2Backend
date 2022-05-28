@@ -1,7 +1,10 @@
 package com.loja.jogos.ecommerce.controller;
 
+import com.loja.jogos.ecommerce.dto.CustomerForm;
 import com.loja.jogos.ecommerce.dto.GameOfferWrapperDto;
 import com.loja.jogos.ecommerce.dto.PriceDto;
+import com.loja.jogos.ecommerce.dto.PriceForm;
+import com.loja.jogos.ecommerce.service.CheckJwtInfoService;
 import com.loja.jogos.ecommerce.service.PriceService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,17 @@ import java.util.List;
 public class PriceController {
 
     private final PriceService priceService;
+
+    private final CheckJwtInfoService checkJwtInfoService;
+
+
+    @PostMapping()
+    public ResponseEntity<?> createCustomer(@RequestBody PriceForm form, @RequestHeader (name="Authorization") String token) {
+        this.checkJwtInfoService.blockNotAdmin(token);
+        this.priceService.createPrice(form);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @GetMapping("/bpi/{id}")
     public @ResponseBody
