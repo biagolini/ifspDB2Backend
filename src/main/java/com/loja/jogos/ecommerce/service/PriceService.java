@@ -46,30 +46,38 @@ public class PriceService {
 
     public List<PriceDto> findNewestPrices(Long id) {
         Game game = gameRepository.findById(id).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid game id"));
-        List<Price> prices = priceRepository.findByGameID(id);
-        List<PriceDto> newestPrices = new ArrayList<>();
+        List<Price> allHistoricPrices = priceRepository.findByGameID(id);
+        List<PriceDto> listOfPricesToReturn = new ArrayList<>();
 
         Boolean testAddNewGamePlatformPrice;
-        if(prices.size()>0){
-            GamePlatform gamePlatform = gamePlatformRepository.findById(prices.get(0).getGamePlatform()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Gameplatform not found"));
-            newestPrices.add(new PriceDto(prices.get(0),gamePlatform));
-            for(int i =1; i<prices.size();i++){
-                Long currentGamePlatform = prices.get(i).getGamePlatform();
-                LocalDateTime currentDateTime  = prices.get(i).getDateTimePublish();
+        if(allHistoricPrices.size()>0){
+            GamePlatform gamePlatform = gamePlatformRepository.findById(allHistoricPrices.get(0).getGamePlatform()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Gameplatform not found"));
+            listOfPricesToReturn.add(new PriceDto(allHistoricPrices.get(0),gamePlatform));
+            for(int i =1; i<allHistoricPrices.size();i++){ // Para cada um dos preços encontrados para o jogo em questão
+                Long consultPricesGamePlatform = allHistoricPrices.get(i).getGamePlatform(); // Identifica qual é a plataforma para o jogo (ex. PlayStation 5 ou XBox)
+                LocalDateTime consultPricesDateTime  = allHistoricPrices.get(i).getDateTimePublish(); // Identifica qual é a data de publicação do preço
                 testAddNewGamePlatformPrice = true;
-                gamePlatform = gamePlatformRepository.findById(prices.get(i).getGamePlatform()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Gameplatform not found"));
-                for(int z = 0; z < newestPrices.size();z++){
-                    if(currentGamePlatform==newestPrices.get(z).getIdPlatform()&&currentDateTime.isAfter(newestPrices.get(z).getDateTimePublish())){
-                        newestPrices.set(z, new PriceDto(prices.get(i),gamePlatform));
+                gamePlatform = gamePlatformRepository.findById(allHistoricPrices.get(i).getGamePlatform()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Gameplatform not found"));
+                for(int z = 0; z < listOfPricesToReturn.size();z++) { // Para cada um dos item que já estão na lista que será entregue ao usuario
+                    // A Plataforma do item presente  da lista que vai ser entregue ao usuario = a um novo preco da lista de historico de preços?
+                    // E, a data do preço encontrado na pesquisa, foi publicada DEPOIS do preço que estava na lista a ser entregue ao cliente?
+                    if (consultPricesGamePlatform == listOfPricesToReturn.get(z).getIdGamePlatform()) {
+                        // Se em algum momento da pesquisa no historico de preço...
+                        // foi visto que a plataforma do jogo, já está com um item presente na lista a ser entregue para o clinete, não precisa adiconar na lista
+                        testAddNewGamePlatformPrice = false;
+                        // Se sim, o item encontrado na pesqquisa foi publicado depois do que está dentro da lista a ser entregue, atualize o preço a ser entregue
+                        if (consultPricesDateTime.isAfter(listOfPricesToReturn.get(z).getDateTimePublish())) {
+                            listOfPricesToReturn.set(z, new PriceDto(allHistoricPrices.get(i), gamePlatform));
+                        }
                     }
-                    if(currentGamePlatform==newestPrices.get(z).getIdPlatform()) testAddNewGamePlatformPrice = false;
                 }
+                // Se a plataforma do jogo, não estava presente na lista a ser entregue para o clinete, precisa adiconar na lista
                 if(testAddNewGamePlatformPrice) {
-                    newestPrices.add(new PriceDto(prices.get(i),gamePlatform));
+                    listOfPricesToReturn.add(new PriceDto(allHistoricPrices.get(i),gamePlatform));
                 }
             }
         }
-        return newestPrices;
+        return listOfPricesToReturn;
     }
 
     public Double findBestPrice(Long id) {

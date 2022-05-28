@@ -11,5 +11,6 @@ public class UserForm {
     private String email;
     private String password;
     private Long idUserProfile;
+    private Long idCustomer;
 
 }

@@ -35,9 +35,11 @@ public class User implements UserDetails {
     @Column(name = "dsPasswordDateTimeLastEdition")
     private LocalDateTime lastPasswordUpdate;
 
-
     @Column(name = "idUserProfile")
     private Long idUserProfile;
+
+    @Column(name = "idCustomer")
+    private Long idCustomer;
 
     @Column(name = "stActive")
     private Boolean isActive;
@@ -47,6 +49,7 @@ public class User implements UserDetails {
         this.email = form.getEmail();
         this.password = form.getPassword();
         this.idUserProfile = form.getIdUserProfile();
+        this.idCustomer = form.getIdCustomer();
         this.isActive = true;
     }
 

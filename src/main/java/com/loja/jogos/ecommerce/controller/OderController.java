@@ -1,6 +1,7 @@
 package com.loja.jogos.ecommerce.controller;
 
 import com.loja.jogos.ecommerce.dto.*;
+import com.loja.jogos.ecommerce.service.CheckJwtInfoService;
 import com.loja.jogos.ecommerce.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -23,6 +24,9 @@ public class OderController {
     private final ConversionService conversionService;
 
     private final OrderService orderService;
+
+    private final CheckJwtInfoService checkJwtInfoService;
+
 
     @GetMapping
     public @ResponseBody
@@ -55,8 +59,10 @@ public class OderController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> createOrder(@RequestBody OrderWrapperForm form) {
-        this.orderService.createOrder(form);
+    public ResponseEntity<?> createOrder(@RequestBody OrderWrapperForm form,
+                                         @RequestHeader (name="Authorization") String token) {
+        this.checkJwtInfoService.blockNotCustomer(token);
+        this.orderService.createOrder(form,token);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

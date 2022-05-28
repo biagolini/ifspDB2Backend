@@ -34,6 +34,8 @@ public class OrderService {
 
     private final TypeStatusOrderRepository typeStatusOrderRepository;
 
+    private final CheckJwtInfoService checkJwtInfoService;
+
 
     public Page<Order> findAll(Pageable pageable) {
         return  this.orderRepository.findAll(pageable);
@@ -47,9 +49,11 @@ public class OrderService {
         return this.orderRepository.findAll(OrderSpecification.likeDescription(orderStatus, idOrder, idCustomer, username, firstName, lastName, email, cpf), pageable);
     }
 
-    public void  createOrder(OrderWrapperForm form) {
+    public void  createOrder(OrderWrapperForm form,  String token) {
         // Validar id de usuário
-        Long customerId = 1L; // Atualizar para Id do token
+        User user = this.checkJwtInfoService.getUser(token);
+        Long customerId = user.getIdCustomer();// Atualizar para Id do token
+
         // Validar quantidade de itens
         if(form.getItens().size()<1) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"No itens found");
         // Validar as ids de preço
