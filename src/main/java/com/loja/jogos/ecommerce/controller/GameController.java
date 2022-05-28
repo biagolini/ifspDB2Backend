@@ -13,7 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/game")
+@RequestMapping("game")
 @AllArgsConstructor
 public class GameController {
 

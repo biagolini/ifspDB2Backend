@@ -3,6 +3,7 @@ package com.loja.jogos.ecommerce.controller;
 import com.loja.jogos.ecommerce.dto.CustomerDto;
 import com.loja.jogos.ecommerce.dto.CustomerForm;
 import com.loja.jogos.ecommerce.dto.GameDto;
+import com.loja.jogos.ecommerce.service.CheckJwtInfoService;
 import com.loja.jogos.ecommerce.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -23,6 +24,8 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
+    private final CheckJwtInfoService checkJwtInfoService;
+
 
     @GetMapping
     public @ResponseBody
@@ -33,8 +36,11 @@ public class CustomerController {
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String cpf,
             @RequestParam(required = false) Long state,
-            Pageable pageable
+            Pageable pageable,
+            @RequestHeader (name="Authorization") String token
     ){
+        this.checkJwtInfoService.blockNotAdmin(token);
+
         if(query==null && firstName==null && lastName==null && email==null && cpf==null && state==null) { // Busca sem nenhum parametro
             Page<CustomerDto> pageReturnObject = this.customerService
                     .findAll(pageable)
@@ -55,26 +61,30 @@ public class CustomerController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findCustomerById(@PathVariable Long id) {
+    public ResponseEntity<?> findCustomerById(@PathVariable Long id, @RequestHeader (name="Authorization") String token) {
+        this.checkJwtInfoService.blockNotAdmin(token);
         CustomerDto response = this.customerService.findCustomerByOd(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     @PostMapping()
-    public ResponseEntity<?> createCustomer(@RequestBody CustomerForm form) {
+    public ResponseEntity<?> createCustomer(@RequestBody CustomerForm form, @RequestHeader (name="Authorization") String token) {
+        this.checkJwtInfoService.blockNotAdmin(token);
         this.customerService.createCustomer(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<?> inactiveCustomer(@PathVariable Long id) {
+    public ResponseEntity<?> inactiveCustomer(@PathVariable Long id, @RequestHeader (name="Authorization") String token) {
+        this.checkJwtInfoService.blockNotAdmin(token);
         this.customerService.inactiveCustomer(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody  CustomerForm form) {
+    public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody  CustomerForm form, @RequestHeader (name="Authorization") String token) {
+        this.checkJwtInfoService.blockNotAdmin(token);
         this.customerService.updateCustomer(id, form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
