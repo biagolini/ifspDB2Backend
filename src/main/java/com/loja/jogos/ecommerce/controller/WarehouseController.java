@@ -1,7 +1,6 @@
-package com.loja.jogos.ecommerce.service.controller;
+package com.loja.jogos.ecommerce.controller;
 
 import com.loja.jogos.ecommerce.dto.GameSummaryDto;
-import com.loja.jogos.ecommerce.dto.TypeStatusOrderDto;
 import com.loja.jogos.ecommerce.dto.WarehouseBalanceDto;
 import com.loja.jogos.ecommerce.dto.WarehouseDto;
 import com.loja.jogos.ecommerce.service.CheckJwtInfoService;
@@ -36,7 +35,7 @@ public class WarehouseController {
     @GetMapping("/balance")
     public @ResponseBody
     Page<WarehouseBalanceDto> balancePaginated(
-            @RequestParam(required = false) Long gameId,
+            @RequestParam(required = false) String gameName,
             @PageableDefault(sort = "lastUpdate", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable,
             @RequestHeader (name="Authorization") String token
     ) {
@@ -44,10 +43,10 @@ public class WarehouseController {
 
         Page<WarehouseBalanceDto> pageReturnObject;
 
-        if (gameId == null) {
+        if (gameName == null) {
             pageReturnObject =  this.warehouseService.findAllBalance(pageable).map(entity -> this.conversionService.convert(entity, WarehouseBalanceDto.class));
         }else {
-            pageReturnObject = this.warehouseService.findAllBalance(pageable, gameId).map(entity -> this.conversionService.convert(entity, WarehouseBalanceDto.class));
+            pageReturnObject = this.warehouseService.findAllBalance(pageable, gameName).map(entity -> this.conversionService.convert(entity, WarehouseBalanceDto.class));
         }
 
         pageReturnObject = this.warehouseService.fillWarehouseBalancePageble(pageReturnObject);
@@ -59,7 +58,7 @@ public class WarehouseController {
     @GetMapping("/entrance")
     public @ResponseBody
     Page<WarehouseDto> entrancePaginated(
-            @RequestParam(required = false) Long gameId,
+            @RequestParam(required = false) String gameName,
             @PageableDefault(sort = "entranceDateTime", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable,
             @RequestHeader (name="Authorization") String token
     ) {
@@ -67,10 +66,10 @@ public class WarehouseController {
 
         Page<WarehouseDto> pageReturnObject;
 
-        if (gameId == null) {
+        if (gameName == null) {
             pageReturnObject =  this.warehouseService.findAllEntrance(pageable).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
         } else {
-            pageReturnObject =  this.warehouseService.findAllEntrance(pageable, gameId).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
+            pageReturnObject =  this.warehouseService.findAllEntrance(pageable, gameName).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
         }
 
         pageReturnObject = this.warehouseService.fillWarehousePageble(pageReturnObject);
@@ -83,18 +82,17 @@ public class WarehouseController {
     @GetMapping("/exit")
     public @ResponseBody
     Page<WarehouseDto> exitPaginated(
-            @RequestParam(required = false) Long gameId,
+            @RequestParam(required = false) String gameName,
             @PageableDefault(sort = "exitDateTime", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable,
             @RequestHeader (name="Authorization") String token
     ) {
         this.checkJwtInfoService.blockNotAdminEstoque(token);
-
         Page<WarehouseDto> pageReturnObject;
 
-        if (gameId == null) {
+        if (gameName == null) {
             pageReturnObject =  this.warehouseService.findAllExit(pageable).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
         } else {
-            pageReturnObject =  this.warehouseService.findAllExit(pageable, gameId).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
+            pageReturnObject =  this.warehouseService.findAllExit(pageable, gameName).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
         }
 
         pageReturnObject = this.warehouseService.fillWarehousePageble(pageReturnObject);

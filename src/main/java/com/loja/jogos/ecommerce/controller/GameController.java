@@ -1,4 +1,4 @@
-package com.loja.jogos.ecommerce.service.controller;
+package com.loja.jogos.ecommerce.controller;
 
 import com.loja.jogos.ecommerce.dto.GameDto;
 import com.loja.jogos.ecommerce.dto.HighlightDto;
@@ -28,7 +28,7 @@ public class GameController {
     Page<GameDto> findAllPaginated(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long genre,
-            Pageable pageable // @PageableDefault(sort = "releaseDate", direction = Sort.Direction.DESC, page = 0, size = 10)
+            @PageableDefault(sort = "releaseDate", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable
     ) {
         Page<GameDto> pageReturnObject;
 

@@ -1,7 +1,6 @@
 package com.loja.jogos.ecommerce.service;
 
 import com.loja.jogos.ecommerce.dto.GameSummaryDto;
-import com.loja.jogos.ecommerce.dto.WarehouseBalanceDto;
 import com.loja.jogos.ecommerce.entity.Game;
 import com.loja.jogos.ecommerce.entity.Highlight;
 import com.loja.jogos.ecommerce.repository.GameRepository;

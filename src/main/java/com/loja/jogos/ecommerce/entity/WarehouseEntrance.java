@@ -23,7 +23,6 @@ public class WarehouseEntrance {
     @ManyToOne
     private GamePlatform gamePlatform;
 
-
     @Column(name = "idTypeWarehouseMovement")
     private Long typeWarehouseMovement;
 

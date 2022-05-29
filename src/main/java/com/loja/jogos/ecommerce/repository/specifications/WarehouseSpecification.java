@@ -9,18 +9,18 @@ import org.springframework.data.jpa.domain.Specification;
 public class WarehouseSpecification {
 
     // WarehouseBalance - gamePlatform
-    public static Specification<WarehouseBalance>  balanceGamePlatformEquals(Long info) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(WarehouseBalance_.gamePlatform).get(GamePlatform_.game).get(Game_.id) ,  info );
+    public static Specification<WarehouseBalance>  balanceGamePlatformLike(String info) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(WarehouseBalance_.gamePlatform).get(GamePlatform_.game).get(Game_.NAME) ,  "%"+info+"%" );
     }
 
     // WarehouseEntrance - gamePlatform
-    public static Specification<WarehouseEntrance>  entranceGamePlatformEquals(Long info) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(WarehouseEntrance_.gamePlatform).get(GamePlatform_.game).get(Game_.id) ,  info );
+    public static Specification<WarehouseEntrance>  entranceGamePlatformLike(String info) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(WarehouseEntrance_.gamePlatform).get(GamePlatform_.game).get(Game_.NAME) ,  "%"+info+"%" );
     }
 
     // WarehouseExit - gamePlatform
-    public static Specification<WarehouseExit>  exitGamePlatformEquals(Long info) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(WarehouseExit_.gamePlatform).get(GamePlatform_.game).get(Game_.id) ,  info );
+    public static Specification<WarehouseExit>  exitGamePlatformLike(String info) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(WarehouseExit_.gamePlatform).get(GamePlatform_.game).get(Game_.NAME) ,  "%"+info+"%" );
     }
 
 }

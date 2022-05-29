@@ -1,4 +1,4 @@
-package com.loja.jogos.ecommerce.service.controller;
+package com.loja.jogos.ecommerce.controller;
 
 import com.loja.jogos.ecommerce.dto.CustomerForm;
 import com.loja.jogos.ecommerce.dto.GameOfferWrapperDto;

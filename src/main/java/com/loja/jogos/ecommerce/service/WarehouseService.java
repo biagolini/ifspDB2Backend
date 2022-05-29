@@ -30,24 +30,24 @@ public class WarehouseService {
         return this.warehouseBalanceRepository.findAll(pageable);
     }
 
-    public Page<WarehouseBalance> findAllBalance(Pageable pageable, Long gamePlatform) {
-        return this.warehouseBalanceRepository.findAll(WarehouseSpecification.balanceGamePlatformEquals(gamePlatform), pageable);
+    public Page<WarehouseBalance> findAllBalance(Pageable pageable, String gameName) {
+        return this.warehouseBalanceRepository.findAll(WarehouseSpecification.balanceGamePlatformLike(gameName), pageable);
     }
 
     public Page<WarehouseEntrance> findAllEntrance(Pageable pageable) {
         return this.warehouseEntranceRepository.findAll(pageable);
     }
 
-    public Page<WarehouseEntrance> findAllEntrance(Pageable pageable, Long gamePlatform) {
-        return this.warehouseEntranceRepository.findAll(WarehouseSpecification.entranceGamePlatformEquals(gamePlatform), pageable);
+    public Page<WarehouseEntrance> findAllEntrance(Pageable pageable, String gameName) {
+        return this.warehouseEntranceRepository.findAll(WarehouseSpecification.entranceGamePlatformLike(gameName), pageable);
     }
 
     public Page<WarehouseExit> findAllExit(Pageable pageable) {
         return this.warehouseExitRepository.findAll(pageable);
     }
 
-    public Page<WarehouseExit> findAllExit(Pageable pageable, Long gamePlatform) {
-        return this.warehouseExitRepository.findAll(WarehouseSpecification.exitGamePlatformEquals(gamePlatform), pageable);
+    public Page<WarehouseExit> findAllExit(Pageable pageable, String gameName) {
+        return this.warehouseExitRepository.findAll(WarehouseSpecification.exitGamePlatformLike(gameName), pageable);
     }
 
     public Page<WarehouseBalanceDto> fillWarehouseBalancePageble(Page<WarehouseBalanceDto> givenPage) {
