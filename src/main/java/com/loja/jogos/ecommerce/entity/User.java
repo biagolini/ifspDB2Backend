@@ -26,8 +26,8 @@ public class User implements UserDetails {
     @Column(name = "dsName")
     private String name;
 
-    @Column(name = "dsEmail")
-    private String email;
+    @Column(name = "dsUsername")
+    private String username;
 
     @Column(name = "dsPassword")
     private String password;
@@ -46,7 +46,7 @@ public class User implements UserDetails {
 
     public User(UserForm form) {
         this.name = form.getName();
-        this.email = form.getEmail();
+        this.username = form.getEmail();
         this.password = form.getPassword();
         this.idUserProfile = form.getIdUserProfile();
         this.idCustomer = form.getIdCustomer();
@@ -78,7 +78,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.username;
     }
 
     @Override

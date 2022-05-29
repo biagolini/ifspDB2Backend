@@ -43,8 +43,7 @@ public class CustomerService {
 
     public void  createCustomer(CustomerForm form) {
         Optional<Customer> conflictTestEmail = customerRepository.findCustomeByEmail(form.getEmail());
-        Optional <Customer> conflictTestUserName = customerRepository.findCustomeByUsername(form.getUsername());
-        if(conflictTestEmail.isPresent()||conflictTestUserName.isPresent() ) {
+        if(conflictTestEmail.isPresent() ) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         typeStateRepository.findById(form.getState()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -53,7 +52,7 @@ public class CustomerService {
     }
 
     public void updateCustomer(Long id, CustomerForm form) {
-        Optional <Customer> conflict = customerRepository.findConflict(form.getUsername(),form.getEmail(),id);
+        Optional <Customer> conflict = customerRepository.findConflict(form.getEmail(),id);
         if(conflict.isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }

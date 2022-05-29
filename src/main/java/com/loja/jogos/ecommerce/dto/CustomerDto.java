@@ -11,7 +11,6 @@ import java.time.LocalDate;
 public class CustomerDto {
 
     private Long id;
-    private String username;
     private String firstName;
     private String lastName;
     private String email;
@@ -25,7 +24,6 @@ public class CustomerDto {
 
     public CustomerDto(Customer customer) {
         this.id = customer.getId();
-        this.username = customer.getUsername();
         this.firstName = customer.getFirstName();
         this.lastName = customer.getLastName();
         this.email = customer.getEmail();

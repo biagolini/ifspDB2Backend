@@ -6,13 +6,13 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tblWarehouseEntrance")
+@Table(name = "tblWarehouseExit")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WarehouseEntrance {
+public class WarehouseExit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +29,7 @@ public class WarehouseEntrance {
     private Long quantity;
 
     @Column(name = "dsMovementDateTime")
-    private LocalDateTime entranceDateTime;
+    private LocalDateTime exitDateTime;
+
 
 }

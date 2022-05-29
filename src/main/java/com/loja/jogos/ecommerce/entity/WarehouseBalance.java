@@ -1,34 +1,33 @@
 package com.loja.jogos.ecommerce.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tblWarehouseEntrance")
+@Table(name = "tblWarehouseBalance")
 @Builder
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WarehouseEntrance {
+public class WarehouseBalance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idWarehouseEntrance")
+    @Column(name = "idWarehouseBalance")
     private Long id;
 
     @Column(name = "idGamePlatform")
     private Long gamePlatform;
 
-    @Column(name = "idTypeWarehouseMovement")
-    private Long typeWarehouseMovement;
-
     @Column(name = "dsQuantity")
     private Long quantity;
 
-    @Column(name = "dsMovementDateTime")
-    private LocalDateTime entranceDateTime;
+    @Column(name = "dsLastUpdate")
+    private LocalDateTime lastUpdate;
 
 }

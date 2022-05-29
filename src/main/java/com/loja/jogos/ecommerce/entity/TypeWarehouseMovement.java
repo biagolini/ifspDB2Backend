@@ -5,26 +5,26 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tblTypeState")
+@Table(name = "tblTypeWarehouseMovement")
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TypeState {
+public class TypeWarehouseMovement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idTypeState")
+    @Column(name = "idTypeWarehouseMovement")
     private Long id;
 
-    @Column(name = "dsAbbreviation")
-    private String description;
+    @Column(name = "dsDescriptionEN")
+    private String descriptionEn;
 
-    @Column(name = "dsName")
-    private String name;
+    @Column(name = "dsDescriptionPT")
+    private String descriptionPt;
 
     @Column(name = "stActive")
     private Boolean isActive;
 
-}
 
+}

@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Table(name = "tblTypeGenre")
 @Builder
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class TypeGenre {

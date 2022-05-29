@@ -13,10 +13,6 @@ import java.util.List;
 public class CustomerSpecification {
 
 
-    public static Specification<Customer> userNameLike(String info){
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Customer_.username),"%"+info+"%");
-    }
-
     public static Specification<Customer> firstNameLike(String info){
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Customer_.firstName),"%"+info+"%");
     }
@@ -61,8 +57,7 @@ public class CustomerSpecification {
 
     public static Specification<Customer> likeGenericQuery(String queryString) {
         return (root, query, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>(6);
-            predicates.add(userNameLike(queryString).toPredicate(root, query, criteriaBuilder));
+            List<Predicate> predicates = new ArrayList<>(5);
             predicates.add(firstNameLike(queryString).toPredicate(root, query, criteriaBuilder));
             predicates.add(lastNameLike(queryString).toPredicate(root, query, criteriaBuilder));
             predicates.add(emailLike(queryString).toPredicate(root, query, criteriaBuilder));

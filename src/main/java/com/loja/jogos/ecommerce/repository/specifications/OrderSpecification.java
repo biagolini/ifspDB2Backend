@@ -24,15 +24,6 @@ public class OrderSpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Order_.customer).get(Customer_.id),  info );
     }
 
-    //username
-    public static Specification<Order>  customerUsernameLike(String info) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.USERNAME),  "%"+info +"%");
-    }
-
-    public static Specification<Order>  customerUsernameEquals(String info) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.USERNAME),  info );
-    }
-
     //firstName
     public static Specification<Order>  customerFirstNameLike(String info) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Order_.customer).get(Customer_.FIRST_NAME),  "%"+info +"%");
@@ -70,14 +61,13 @@ public class OrderSpecification {
     }
 
     public static Specification<Order> likeDescription(Long orderStatus, Long idOrder, Long idCustomer,
-                                                       String username, String firstName, String lastName,
+                                                       String firstName, String lastName,
                                                        String email, String cpf) {
         return (root, query, criteriaBuilder) -> {
-            List<Predicate> predicatesAND = new ArrayList<>(8);
+            List<Predicate> predicatesAND = new ArrayList<>(7);
             if (orderStatus != null) predicatesAND.add(orderStatusEquals(orderStatus).toPredicate(root, query, criteriaBuilder));
             if (idOrder != null) predicatesAND.add(orderIdEquals(idOrder).toPredicate(root, query, criteriaBuilder));
             if (idCustomer != null) predicatesAND.add(customerIdEquals(idCustomer).toPredicate(root, query, criteriaBuilder));
-            if (username != null) predicatesAND.add(customerUsernameEquals(username).toPredicate(root, query, criteriaBuilder));
             if (firstName != null) predicatesAND.add(customerFirstNameEquals(firstName).toPredicate(root, query, criteriaBuilder));
             if (lastName != null) predicatesAND.add(customerLastNameEquals(lastName).toPredicate(root, query, criteriaBuilder));
             if (email != null) predicatesAND.add(customerEmailEquals(email).toPredicate(root, query, criteriaBuilder));
@@ -88,8 +78,7 @@ public class OrderSpecification {
 
     public static Specification<Order> likeGenericQuery(String queryString) {
         return (root, query, criteriaBuilder) -> {
-            List<Predicate> predicatesOR = new ArrayList<>(5);
-            predicatesOR.add(customerUsernameLike(queryString).toPredicate(root,query,criteriaBuilder));
+            List<Predicate> predicatesOR = new ArrayList<>(4);
             predicatesOR.add(customerFirstNameLike(queryString).toPredicate(root,query,criteriaBuilder));
             predicatesOR.add(customerLastNameLike(queryString).toPredicate(root,query,criteriaBuilder));
             predicatesOR.add(customerEmailLike(queryString).toPredicate(root,query,criteriaBuilder));

@@ -20,9 +20,6 @@ public class Customer {
     @Column(name = "idCustomer")
     private Long id;
 
-    @Column(name = "dsUsername")
-    private String username;
-
     @Column(name = "dsFirstName")
     private String firstName;
 
@@ -57,7 +54,6 @@ public class Customer {
     private Boolean isActive;
 
     public Customer(CustomerForm form) {
-        this.username = form.getUsername();
         this.firstName = form.getFirstName();
         this.lastName = form.getLastName();
         this.email = form.getEmail();
@@ -72,7 +68,6 @@ public class Customer {
     }
 
     public void update(CustomerForm form) {
-        this.username = form.getUsername();
         this.firstName = form.getFirstName();
         this.lastName = form.getLastName();
         this.email = form.getEmail();

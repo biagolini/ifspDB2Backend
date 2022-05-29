@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Table(name = "tblTypeStatusOrder")
 @Builder
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class TypeStatusOrder {

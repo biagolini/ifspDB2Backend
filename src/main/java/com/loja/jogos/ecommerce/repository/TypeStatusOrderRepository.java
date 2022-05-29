@@ -14,9 +14,7 @@ import java.util.Optional;
 @Repository
 public interface TypeStatusOrderRepository  extends JpaRepository<TypeStatusOrder,Long> ,JpaSpecificationExecutor<TypeStatusOrder> {
 
-
     @Query(value = "SELECT a FROM TypeStatusOrder a WHERE a.isActive = true")
     List<TypeStatusOrder> findAll();
-
 
 }

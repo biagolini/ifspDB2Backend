@@ -46,8 +46,8 @@ public class OrderService {
         return this.orderRepository.findAll(OrderSpecification.likeGenericQuery(query), pageable);
     }
 
-    public Page<Order> findAll(Pageable pageable, Long orderStatus, Long idOrder, Long idCustomer, String username, String firstName,String lastName,String email,String cpf) {
-        return this.orderRepository.findAll(OrderSpecification.likeDescription(orderStatus, idOrder, idCustomer, username, firstName, lastName, email, cpf), pageable);
+    public Page<Order> findAll(Pageable pageable, Long orderStatus, Long idOrder, Long idCustomer, String firstName,String lastName,String email,String cpf) {
+        return this.orderRepository.findAll(OrderSpecification.likeDescription(orderStatus, idOrder, idCustomer, firstName, lastName, email, cpf), pageable);
     }
 
     public void  createOrder(OrderWrapperForm form,  String token) {

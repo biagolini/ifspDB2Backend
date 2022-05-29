@@ -69,6 +69,13 @@ public class CheckJwtInfoService {
         if (!scope.trim().equals("admin")) throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Not allowed");
     }
 
+    public void blockNotAdminEstoque(String token) {
+        String scope = this.getPayloadItem(token, "scope");
+        if (!scope.trim().equals("admin") && !scope.trim().equals("estoque")) throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Not allowed");
+    }
+
+
+
     public void blockNotCustomer(String token) {
         String scope = this.getPayloadItem(token,"scope");
         if(!scope.trim().equals("customer")) throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Not allowed");

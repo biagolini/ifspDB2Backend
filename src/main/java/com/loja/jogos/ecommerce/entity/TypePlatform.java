@@ -13,7 +13,6 @@ import javax.persistence.*;
 @Table(name = "tblTypePlatform")
 @Builder
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class TypePlatform {
