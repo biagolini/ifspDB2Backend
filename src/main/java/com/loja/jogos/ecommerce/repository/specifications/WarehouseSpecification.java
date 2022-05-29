@@ -1,5 +1,8 @@
 package com.loja.jogos.ecommerce.repository.specifications;
 
+import com.loja.jogos.ecommerce.entity.WarehouseBalance;
+import com.loja.jogos.ecommerce.entity.WarehouseEntrance;
+import com.loja.jogos.ecommerce.entity.WarehouseExit;
 import com.loja.jogos.ecommerce.entity.*;
 import org.springframework.data.jpa.domain.Specification;
 

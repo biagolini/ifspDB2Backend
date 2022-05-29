@@ -2,12 +2,10 @@ package com.loja.jogos.ecommerce.dto;
 
 import com.loja.jogos.ecommerce.entity.GamePlatform;
 import com.loja.jogos.ecommerce.entity.Price;
-import com.loja.jogos.ecommerce.repository.GamePlatformRepository;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Getter
 @Setter

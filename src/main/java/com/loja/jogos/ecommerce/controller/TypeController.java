@@ -1,9 +1,6 @@
 package com.loja.jogos.ecommerce.controller;
 
-import com.loja.jogos.ecommerce.dto.TypeGenreDto;
-import com.loja.jogos.ecommerce.dto.TypePlatformDto;
-import com.loja.jogos.ecommerce.dto.TypeStateDto;
-import com.loja.jogos.ecommerce.dto.TypeStatusOrderDto;
+import com.loja.jogos.ecommerce.dto.*;
 import com.loja.jogos.ecommerce.service.TypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,5 +41,12 @@ public class TypeController {
         List<TypeStatusOrderDto> dto = this.typeService.getStatusOrder();
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
+
+    @GetMapping("/getWarehouseMovement")
+    public ResponseEntity<?> getWarehouseMovement() {
+        List<TypeWarehouseMovementDto> dto = this.typeService.getWarehouseMovement();
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
 
 }

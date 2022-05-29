@@ -1,6 +1,8 @@
 package com.loja.jogos.ecommerce.controller;
 
 import com.loja.jogos.ecommerce.dto.CustomerDto;
+import com.loja.jogos.ecommerce.dto.GameDto;
+import com.loja.jogos.ecommerce.dto.WarehouseBalanceDto;
 import com.loja.jogos.ecommerce.dto.WarehouseDto;
 import com.loja.jogos.ecommerce.service.CheckJwtInfoService;
 import com.loja.jogos.ecommerce.service.WarehouseService;
@@ -8,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,17 +28,24 @@ public class WarehouseController {
 
     @GetMapping("/balance")
     public @ResponseBody
-    Page<WarehouseDto> balancePaginated(
+    Page<WarehouseBalanceDto> balancePaginated(
             @RequestParam(required = false) Long gamePlatform,
-            Pageable pageable,
+            @PageableDefault(sort = "lastUpdate", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable,
             @RequestHeader (name="Authorization") String token
     ) {
         this.checkJwtInfoService.blockNotAdminEstoque(token);
 
+        Page<WarehouseBalanceDto> pageReturnObject;
+
         if (gamePlatform == null) {
-            return this.warehouseService.findAllBalance(pageable).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
+            pageReturnObject =  this.warehouseService.findAllBalance(pageable).map(entity -> this.conversionService.convert(entity, WarehouseBalanceDto.class));
+        }else {
+            pageReturnObject = this.warehouseService.findAllBalance(pageable, gamePlatform).map(entity -> this.conversionService.convert(entity, WarehouseBalanceDto.class));
         }
-        return this.warehouseService.findAllBalance(pageable, gamePlatform).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
+
+        pageReturnObject = this.warehouseService.fillWarehouseBalancePageble(pageReturnObject);
+
+        return pageReturnObject;
     }
 
 
@@ -42,15 +53,22 @@ public class WarehouseController {
     public @ResponseBody
     Page<WarehouseDto> entrancePaginated(
             @RequestParam(required = false) Long gamePlatform,
-            Pageable pageable,
+            @PageableDefault(sort = "entranceDateTime", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable,
             @RequestHeader (name="Authorization") String token
     ) {
         this.checkJwtInfoService.blockNotAdminEstoque(token);
 
+        Page<WarehouseDto> pageReturnObject;
+
         if (gamePlatform == null) {
-            return this.warehouseService.findAllEntrance(pageable).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
+            pageReturnObject =  this.warehouseService.findAllEntrance(pageable).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
+        } else {
+            pageReturnObject =  this.warehouseService.findAllEntrance(pageable, gamePlatform).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
         }
-        return this.warehouseService.findAllEntrance(pageable, gamePlatform).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
+
+        pageReturnObject = this.warehouseService.fillWarehousePageble(pageReturnObject);
+
+        return pageReturnObject;
     }
 
 
@@ -59,15 +77,22 @@ public class WarehouseController {
     public @ResponseBody
     Page<WarehouseDto> exitPaginated(
             @RequestParam(required = false) Long gamePlatform,
-            Pageable pageable,
+            @PageableDefault(sort = "exitDateTime", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable,
             @RequestHeader (name="Authorization") String token
     ) {
         this.checkJwtInfoService.blockNotAdminEstoque(token);
 
+        Page<WarehouseDto> pageReturnObject;
+
         if (gamePlatform == null) {
-            return this.warehouseService.findAllExit(pageable).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
+            pageReturnObject =  this.warehouseService.findAllExit(pageable).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
+        } else {
+            pageReturnObject =  this.warehouseService.findAllExit(pageable, gamePlatform).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
         }
-        return this.warehouseService.findAllExit(pageable, gamePlatform).map(entity -> this.conversionService.convert(entity, WarehouseDto.class));
+
+        pageReturnObject = this.warehouseService.fillWarehousePageble(pageReturnObject);
+
+        return pageReturnObject;
     }
 
 

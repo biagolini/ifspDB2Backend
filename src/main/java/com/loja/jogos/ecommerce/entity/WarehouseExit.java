@@ -16,7 +16,7 @@ public class WarehouseExit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idWarehouseEntrance")
+    @Column(name = "idWarehouseExit")
     private Long id;
 
     @Column(name = "idGamePlatform")

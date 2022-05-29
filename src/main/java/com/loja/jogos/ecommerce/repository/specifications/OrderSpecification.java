@@ -1,5 +1,6 @@
 package com.loja.jogos.ecommerce.repository.specifications;
 
+import com.loja.jogos.ecommerce.entity.Order;
 import com.loja.jogos.ecommerce.entity.*;
 import org.springframework.data.jpa.domain.Specification;
 
