@@ -1,6 +1,5 @@
 package com.loja.jogos.ecommerce.service;
 
-import com.loja.jogos.ecommerce.dto.PriceDto;
 import com.loja.jogos.ecommerce.dto.WarehouseBalanceDto;
 import com.loja.jogos.ecommerce.dto.WarehouseDto;
 import com.loja.jogos.ecommerce.entity.*;
@@ -12,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -57,7 +54,7 @@ public class WarehouseService {
         for(WarehouseBalanceDto item: givenPage.getContent()){
             GamePlatform gamePlatform = gamePlatformRepository.findById(item.getGamePlatform() ).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Gameplatform not found"));
             Game game = gameRepository.findById(gamePlatform.getGame().getId()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game not found"));
-            item.setTypePlatformId(gamePlatform.getPlatform().getId());
+            item.setIdPlatform(gamePlatform.getPlatform().getId());
             item.setGameName(game.getName());
             item.setGameCover(game.getCover());
         }
@@ -70,7 +67,7 @@ public class WarehouseService {
         for(WarehouseDto item: givenPage.getContent()){
             GamePlatform gamePlatform = gamePlatformRepository.findById(item.getGamePlatform() ).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Gameplatform not found"));
             Game game = gameRepository.findById(gamePlatform.getGame().getId()).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Game not found"));
-            item.setTypePlatformId(gamePlatform.getPlatform().getId());
+            item.setIdPlatform(gamePlatform.getPlatform().getId());
             item.setGameName(game.getName());
             item.setGameCover(game.getCover());
         }

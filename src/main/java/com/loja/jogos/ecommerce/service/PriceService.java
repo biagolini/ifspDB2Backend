@@ -33,8 +33,8 @@ public class PriceService {
 
 
     public Page<GameDto> fillBestPrice( Page<GameDto> givenPage) {
-        for(int i =1; i<givenPage.getSize();i++){
-            givenPage.getContent().get(i).setBestPrice(this.findBestPrice(givenPage.getContent().get(i).getId()));
+        for(GameDto item: givenPage.getContent()){
+            item.setBestPrice(this.findBestPrice(item.getId()));
         }
         return givenPage;
     }

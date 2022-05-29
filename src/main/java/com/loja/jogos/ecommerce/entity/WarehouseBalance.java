@@ -21,8 +21,9 @@ public class WarehouseBalance {
     @Column(name = "idWarehouseBalance")
     private Long id;
 
-    @Column(name = "idGamePlatform")
-    private Long gamePlatform;
+    @JoinColumn(name = "idGamePlatform")
+    @ManyToOne
+    private GamePlatform gamePlatform;
 
     @Column(name = "dsQuantity")
     private Long quantity;

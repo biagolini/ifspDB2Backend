@@ -1,4 +1,4 @@
-package com.loja.jogos.ecommerce.controller;
+package com.loja.jogos.ecommerce.service.controller;
 
 import com.loja.jogos.ecommerce.dto.GameDto;
 import com.loja.jogos.ecommerce.dto.HighlightDto;
@@ -28,7 +28,7 @@ public class GameController {
     Page<GameDto> findAllPaginated(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long genre,
-            @PageableDefault(sort = "releaseDate", direction = Sort.Direction.DESC, page = 0, size = 10) Pageable pageable
+            Pageable pageable // @PageableDefault(sort = "releaseDate", direction = Sort.Direction.DESC, page = 0, size = 10)
     ) {
         Page<GameDto> pageReturnObject;
 
@@ -36,10 +36,11 @@ public class GameController {
             pageReturnObject = this.gameService
                                 .findAll(pageable)
                                 .map(entity -> this.conversionService.convert(entity, GameDto.class));
+        } else {
+            pageReturnObject = this.gameService // Busca com dados de perfil
+                    .findAll(pageable, name, genre)
+                    .map(entity -> this.conversionService.convert(entity, GameDto.class));
         }
-        pageReturnObject=  this.gameService // Busca com dados de perfil
-                            .findAll(pageable, name, genre)
-                            .map(entity -> this.conversionService.convert(entity, GameDto.class));
         pageReturnObject = this.priceService.fillBestPrice(pageReturnObject);
         return pageReturnObject;
     }

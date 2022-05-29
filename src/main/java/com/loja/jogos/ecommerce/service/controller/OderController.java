@@ -1,4 +1,4 @@
-package com.loja.jogos.ecommerce.controller;
+package com.loja.jogos.ecommerce.service.controller;
 
 import com.loja.jogos.ecommerce.dto.*;
 import com.loja.jogos.ecommerce.service.CheckJwtInfoService;

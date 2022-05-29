@@ -196,11 +196,10 @@ public class OrderService {
         return  response;
     }
 
-   public Page<OrderDto> fillCustomerPageInfo(Page<OrderDto> pageReturnObject) {
-        for(int i =0; i<pageReturnObject.getContent().size();i++){
-            // Ao que indica, o pageReturnObject é estático
-            fillCustomerInfo(pageReturnObject.getContent().get(i));
+   public Page<OrderDto> fillCustomerPageInfo(Page<OrderDto> givenPage) {
+       for(OrderDto item: givenPage.getContent()){
+            fillCustomerInfo(item);
         }
-        return pageReturnObject;
+        return givenPage;
     }
 }

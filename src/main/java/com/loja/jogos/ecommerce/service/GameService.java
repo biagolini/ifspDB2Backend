@@ -1,5 +1,7 @@
 package com.loja.jogos.ecommerce.service;
 
+import com.loja.jogos.ecommerce.dto.GameSummaryDto;
+import com.loja.jogos.ecommerce.dto.WarehouseBalanceDto;
 import com.loja.jogos.ecommerce.entity.Game;
 import com.loja.jogos.ecommerce.entity.Highlight;
 import com.loja.jogos.ecommerce.repository.GameRepository;
@@ -10,6 +12,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -31,9 +36,17 @@ public class GameService {
         return this.gameRepository.findByidTypePlatform(pageable, id);
     }
 
-
     public Page<Highlight> findHighlight(Pageable pageable) {
         return this.highlightRepository.findAll(HighlightSpecification.isActive(), pageable);
+    }
+
+    public List<GameSummaryDto> getGamesList() {
+        List<Game> allGames = this.gameRepository.findAll();
+        List<GameSummaryDto> dto = new ArrayList<>();
+        for(Game item: allGames) {
+         dto.add(new GameSummaryDto(item));
+        }
+        return  dto;
     }
 }
 

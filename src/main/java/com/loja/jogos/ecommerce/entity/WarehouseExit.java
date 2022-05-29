@@ -19,8 +19,9 @@ public class WarehouseExit {
     @Column(name = "idWarehouseExit")
     private Long id;
 
-    @Column(name = "idGamePlatform")
-    private Long gamePlatform;
+    @JoinColumn(name = "idGamePlatform")
+    @ManyToOne
+    private GamePlatform gamePlatform;
 
     @Column(name = "idTypeWarehouseMovement")
     private Long typeWarehouseMovement;

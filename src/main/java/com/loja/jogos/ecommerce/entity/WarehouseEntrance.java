@@ -19,8 +19,10 @@ public class WarehouseEntrance {
     @Column(name = "idWarehouseEntrance")
     private Long id;
 
-    @Column(name = "idGamePlatform")
-    private Long gamePlatform;
+    @JoinColumn(name = "idGamePlatform")
+    @ManyToOne
+    private GamePlatform gamePlatform;
+
 
     @Column(name = "idTypeWarehouseMovement")
     private Long typeWarehouseMovement;
