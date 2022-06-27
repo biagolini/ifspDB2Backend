@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public interface TypeWarehouseMovementRepository  extends JpaRepository<TypeWarehouseMovement,Long>, JpaSpecificationExecutor<TypeWarehouseMovement> {
-
     @Query(value = "SELECT a FROM TypeWarehouseMovement a WHERE a.isActive = true")
     List<TypeWarehouseMovement> findAll();
 

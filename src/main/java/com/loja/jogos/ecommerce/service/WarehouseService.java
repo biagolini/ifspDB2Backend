@@ -2,6 +2,7 @@ package com.loja.jogos.ecommerce.service;
 
 import com.loja.jogos.ecommerce.dto.WarehouseBalanceDto;
 import com.loja.jogos.ecommerce.dto.WarehouseDto;
+import com.loja.jogos.ecommerce.dto.WarehouseMovementForm;
 import com.loja.jogos.ecommerce.entity.*;
 import com.loja.jogos.ecommerce.repository.*;
 import com.loja.jogos.ecommerce.repository.specifications.WarehouseSpecification;
@@ -25,6 +26,9 @@ public class WarehouseService {
     private final GameRepository gameRepository;
 
     private final GamePlatformRepository gamePlatformRepository;
+
+    private final TypeWarehouseMovementRepository typeWarehouseMovementRepository;
+
 
     public Page<WarehouseBalance> findAllBalance(Pageable pageable) {
         return this.warehouseBalanceRepository.findAll(pageable);
@@ -72,5 +76,19 @@ public class WarehouseService {
             item.setGameCover(game.getCover());
         }
         return givenPage;
+    }
+
+    public void postEntrance(WarehouseMovementForm form, String token) {
+        GamePlatform gamePlatform = gamePlatformRepository.findById(form.getIdGamePlatform() ).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Gameplatform not found"));
+        typeWarehouseMovementRepository.findById(form.getIdTypeWarehouseMovement() ).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Type of warehouse movement not found"));
+        WarehouseEntrance newRegister = new WarehouseEntrance(gamePlatform, form);
+        this.warehouseEntranceRepository.save(newRegister);
+    }
+
+    public void postExit(WarehouseMovementForm form, String token) {
+        GamePlatform gamePlatform = gamePlatformRepository.findById(form.getIdGamePlatform() ).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Gameplatform not found"));
+        typeWarehouseMovementRepository.findById(form.getIdTypeWarehouseMovement() ).orElseThrow(() ->  new ResponseStatusException(HttpStatus.BAD_REQUEST,"Type of warehouse movement not found"));
+        WarehouseExit newRegister = new WarehouseExit(gamePlatform, form);
+        this.warehouseExitRepository.save(newRegister);
     }
 }

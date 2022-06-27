@@ -1,5 +1,6 @@
 package com.loja.jogos.ecommerce.entity;
 
+import com.loja.jogos.ecommerce.dto.WarehouseMovementForm;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,5 +33,11 @@ public class WarehouseExit {
     @Column(name = "dsMovementDateTime")
     private LocalDateTime exitDateTime;
 
+    public WarehouseExit(GamePlatform gamePlatform, WarehouseMovementForm form) {
+        this.gamePlatform = gamePlatform;
+        this.typeWarehouseMovement = form.getIdTypeWarehouseMovement();
+        this.quantity = form.getQuantity();
+        this.exitDateTime = LocalDateTime.now();
+    }
 
 }

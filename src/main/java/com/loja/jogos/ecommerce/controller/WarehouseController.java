@@ -1,8 +1,6 @@
 package com.loja.jogos.ecommerce.controller;
 
-import com.loja.jogos.ecommerce.dto.GameSummaryDto;
-import com.loja.jogos.ecommerce.dto.WarehouseBalanceDto;
-import com.loja.jogos.ecommerce.dto.WarehouseDto;
+import com.loja.jogos.ecommerce.dto.*;
 import com.loja.jogos.ecommerce.service.CheckJwtInfoService;
 import com.loja.jogos.ecommerce.service.GameService;
 import com.loja.jogos.ecommerce.service.WarehouseService;
@@ -104,6 +102,24 @@ public class WarehouseController {
     public ResponseEntity<?> getGameList() {
         List<GameSummaryDto> dto = this.gameService.getGamesList();
         return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
+
+
+    @PostMapping("/entrance")
+    public ResponseEntity<?> postEntrance(@RequestBody WarehouseMovementForm form,
+                                         @RequestHeader (name="Authorization") String token) {
+        this.checkJwtInfoService.blockNotAdminEstoque(token);
+        this.warehouseService.postEntrance(form,token);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/exit")
+    public ResponseEntity<?> postExit(@RequestBody WarehouseMovementForm form,
+                                          @RequestHeader (name="Authorization") String token) {
+        this.checkJwtInfoService.blockNotAdminEstoque(token);
+        this.warehouseService.postExit(form,token);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
